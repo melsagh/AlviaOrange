@@ -6,4 +6,5 @@ beautifulsoup4
 shapely
 pyshp
 pyproj
+plotly
 
