@@ -16,6 +16,7 @@ from .cwfis import (
     fetch_forecast_weather_stations,
     fetch_reporting_weather_stations,
     fetch_fire_history,
+    fire_danger_wms_tile_url,
 )
 
 __all__ = [
@@ -32,4 +33,5 @@ __all__ = [
     "fetch_forecast_weather_stations",
     "fetch_reporting_weather_stations",
     "fetch_fire_history",
+    "fire_danger_wms_tile_url",
 ]

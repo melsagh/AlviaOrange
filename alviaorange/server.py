@@ -20,6 +20,7 @@ from .cwfis import (
     fetch_forecast_weather_stations,
     fetch_reporting_weather_stations,
     fetch_fire_history,
+    fire_danger_wms_tile_url,
 )
 
 app = FastAPI()
@@ -63,6 +64,13 @@ def get_fire_danger(date: str, region: str | None = None) -> dict[str, any]:
     """Return Fire Danger ratings."""
 
     return fetch_fire_danger(date, region)
+
+
+@app.get("/cwfis/fire_danger_tile")
+def get_fire_danger_tile(date: str) -> str:
+    """Return WMS tile URL template for Fire Danger Ratings."""
+
+    return fire_danger_wms_tile_url(date)
 
 
 @app.get("/cwfis/fire_perimeter")
