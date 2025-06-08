@@ -83,3 +83,24 @@ def fetch_fire_history(region: str, start: str, end: str) -> Dict[str, Any]:
     """Fetch fire history records for a region within a date range."""
 
     return fetch_layer("fire-history", region=region, start=start, end=end)
+
+
+def fire_danger_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for Fire Danger Ratings.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used by the WMS layer names.
+    """
+
+    date_str = str(date)
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        f"layers=public:fdr{date_str}&"
+        "styles=cffdrs_fdr_opaque&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
