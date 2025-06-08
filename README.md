@@ -31,6 +31,11 @@ pip install jupyter
 jupyter notebook notebooks/example.ipynb
 ```
 
+Additional notebooks demonstrating every feature with Plotly visualizations can
+be found in the `notebooks/` directory. There is one notebook for each public
+function so you can run them individually and explore the outputs
+interactively.
+
 ## Node.js/TypeScript integration
 
 Developers can interface with the Python tools using a CLI script or by exposing an
