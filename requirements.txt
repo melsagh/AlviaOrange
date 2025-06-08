@@ -3,4 +3,7 @@ fastapi
 uvicorn
 requests
 beautifulsoup4
+shapely
+pyshp
+pyproj
 

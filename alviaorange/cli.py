@@ -17,8 +17,13 @@ def main(argv: Iterable[str] | None = None) -> None:
     )
     args = parser.parse_args(argv)
     hotspots = fetch_hotspots(args.region)
-    for hotspot in hotspots:
-        print(hotspot)
+    if isinstance(hotspots, dict):
+        for region, hs in hotspots.items():
+            for hotspot in hs:
+                print(f"{region}: {hotspot}")
+    else:
+        for hotspot in hotspots:
+            print(hotspot)
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI entry

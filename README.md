@@ -47,6 +47,18 @@ Invoke the command line interface to print hotspots:
 python -m alviaorange.cli --region Canada
 ```
 
+Shapefiles can also be supplied instead of a region name. When the provided
+polygon spans multiple supported regions, hotspots for each region will be
+printed with the region name prefix.
+
+If the shapefile includes a `.prj` file, its geometry will be reprojected to
+WGS84 so that the coordinates match the simple polygons used in this example.
+Otherwise the coordinates are assumed to already be in longitude/latitude.
+
+```bash
+python -m alviaorange.cli --region path/to/area.shp
+```
+
 ## Air Quality Retrieval
 
 The package also includes a function to fetch Canadian Air Quality data from
