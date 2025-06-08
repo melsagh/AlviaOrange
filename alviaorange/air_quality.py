@@ -64,22 +64,56 @@ def fetch_aqi_scale() -> Dict[str, Dict[str, str]]:
     return mapping
 
 
-def fetch_air_quality_history(city: str, date: str) -> list[dict[str, str]]:
-    """Fetch historical AQHI data for a city and date (YYYY-MM-DD)."""
-    url = HISTORY_URL_TEMPLATE.format(city=city.lower(), date=date.replace("-", ""))
-    response = requests.get(url, timeout=10)
-    response.raise_for_status()
+def fetch_air_quality_history(
+    city: str, start_date: str, end_date: str | None = None
+) -> list[dict[str, str]]:
+    """Fetch historical AQHI data for a city between two dates.
 
-    lines = [line for line in response.text.splitlines() if line and not line.startswith("#")]
-    if not lines:
-        return []
+    Parameters
+    ----------
+    city:
+        Name of the city as used by Environment Canada.
+    start_date:
+        Beginning of the range in ``YYYY-MM-DD`` format.
+    end_date:
+        End of the range in ``YYYY-MM-DD`` format. If omitted, only
+        ``start_date`` will be fetched.
 
+    Returns
+    -------
+    list[dict[str, str]]
+        A list of records with ``datetime`` and ``value`` keys.
+
+    Raises
+    ------
+    ValueError
+        If the date strings are invalid or ``end_date`` is before
+        ``start_date``.
+    """
+
+    from datetime import datetime, timedelta
     import csv
 
-    reader = csv.reader(lines)
-    header = next(reader, None)
-    history = []
-    for row in reader:
-        if len(row) >= 2:
-            history.append({"datetime": row[0], "value": row[1]})
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    end = start if end_date is None else datetime.strptime(end_date, "%Y-%m-%d")
+    if start > end:
+        raise ValueError("end_date must not be before start_date")
+
+    history: list[dict[str, str]] = []
+    delta = (end - start).days
+    for i in range(delta + 1):
+        current = start + timedelta(days=i)
+        url = HISTORY_URL_TEMPLATE.format(city=city.lower(), date=current.strftime("%Y%m%d"))
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+
+        lines = [line for line in response.text.splitlines() if line and not line.startswith("#")]
+        if not lines:
+            continue
+
+        reader = csv.reader(lines)
+        next(reader, None)  # discard header
+        for row in reader:
+            if len(row) >= 2:
+                history.append({"datetime": row[0], "value": row[1]})
     return history

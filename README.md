@@ -59,13 +59,14 @@ data = fetch_air_quality()
 print(data.get("Toronto"))
 ```
 
-Additional helpers are available:
+Additional helpers are available. Historical data can be fetched for a
+specific date or a range:
 
 ```python
 from alviaorange import fetch_aqi_scale, fetch_air_quality_history
 
 scale = fetch_aqi_scale()
-history = fetch_air_quality_history("Toronto", "2024-01-01")
+history = fetch_air_quality_history("Toronto", "2024-01-01", "2024-01-02")
 ```
 
 ## Starting the HTTP server

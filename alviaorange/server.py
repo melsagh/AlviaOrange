@@ -33,6 +33,8 @@ def get_air_quality_scale() -> dict[str, dict[str, str]]:
 
 
 @app.get("/air_quality/history")
-def get_air_quality_history(city: str, date: str) -> list[dict[str, str]]:
-    """Return historical AQHI data for a city and date."""
-    return fetch_air_quality_history(city, date)
+def get_air_quality_history(
+    city: str, start: str, end: str | None = None
+) -> list[dict[str, str]]:
+    """Return historical AQHI data for a city within a date range."""
+    return fetch_air_quality_history(city, start, end)
