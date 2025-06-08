@@ -26,8 +26,8 @@ app = FastAPI()
 
 
 @app.get("/hotspots")
-def get_hotspots(region: str = "Canada") -> list[str]:
-    """Return hotspots for the specified region."""
+def get_hotspots(region: str = "Canada") -> list[str] | dict[str, list[str]]:
+    """Return hotspots for the specified region or shapefile."""
     return fetch_hotspots(region)
 
 
