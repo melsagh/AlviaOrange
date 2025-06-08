@@ -47,6 +47,28 @@ Invoke the command line interface to print hotspots:
 python -m alviaorange.cli --region Canada
 ```
 
+## Air Quality Retrieval
+
+The package also includes a function to fetch Canadian Air Quality data from
+Environment Canada's website. Usage example:
+
+```python
+from alviaorange import fetch_air_quality
+
+data = fetch_air_quality()
+print(data.get("Toronto"))
+```
+
+Additional helpers are available. Historical data can be fetched for a
+specific date or a range:
+
+```python
+from alviaorange import fetch_aqi_scale, fetch_air_quality_history
+
+scale = fetch_aqi_scale()
+history = fetch_air_quality_history("Toronto", "2024-01-01", "2024-01-02")
+```
+
 ## Starting the HTTP server
 
 An HTTP endpoint can be started with:

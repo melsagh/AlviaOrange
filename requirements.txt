@@ -1,4 +1,6 @@
 # Core dependencies
 fastapi
 uvicorn
+requests
+beautifulsoup4
 
