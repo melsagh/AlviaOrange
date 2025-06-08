@@ -15,6 +15,7 @@ from alviaorange.cwfis import (
     fetch_forecast_weather_stations,
     fetch_reporting_weather_stations,
     fetch_fire_history,
+    fire_danger_wms_tile_url,
     BASE_URL,
 )
 
@@ -50,3 +51,10 @@ def test_fetch_active_fires(monkeypatch):
     monkeypatch.setattr(cw.requests, "get", fake_get_factory(url))
     data = fetch_active_fires()
     assert data["result"] == "ok"
+
+
+def test_fire_danger_wms_tile_url():
+    url = fire_danger_wms_tile_url("20230401")
+    assert "layers=public:fdr20230401" in url
+    assert url.startswith("https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?")
+    assert "{bbox-epsg-3857}" in url
