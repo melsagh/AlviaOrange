@@ -36,6 +36,32 @@ be found in the `notebooks/` directory. There is one notebook for each public
 function so you can run them individually and explore the outputs
 interactively.
 
+### Displaying Fire Danger WMS tiles
+
+The `fire_danger_wms_tile_url(date)` helper returns a WMS tile URL for the
+Canadian Wildland Fire Information System (CWFIS). It can be used to display the
+Fire Danger Rating layer on interactive maps. The example notebooks demonstrate
+this with Plotly:
+
+```python
+from alviaorange import fire_danger_wms_tile_url
+import plotly.graph_objects as go
+
+token = "YOUR_MAPBOX_ACCESS_TOKEN"
+tile_url = fire_danger_wms_tile_url("20230401")
+
+fig = go.Figure(go.Scattermapbox())
+fig.update_layout(
+    mapbox=dict(
+        accesstoken=token,
+        style="open-street-map",
+        layers=[dict(sourcetype="raster", source=[tile_url], below="traces")],
+    ),
+    margin={"r": 0, "t": 0, "l": 0, "b": 0},
+)
+fig.show()
+```
+
 ## Node.js/TypeScript integration
 
 Developers can interface with the Python tools using a CLI script or by exposing an
