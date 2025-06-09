@@ -25,11 +25,27 @@ _CWFIS_FUNCS = {
     "fetch_reporting_weather_stations",
     "fetch_fire_history",
     "fire_danger_wms_tile_url",
+    "fire_weather_index_wms_tile_url",
+    "fire_perimeter_wms_tile_url",
+    "m3_hotspots_wms_tile_url",
+    "season_hotspots_wms_tile_url",
+    "active_fires_wms_tile_url",
+    "forecast_weather_stations_wms_tile_url",
+    "reporting_weather_stations_wms_tile_url",
+    "fire_history_wms_tile_url",
 }
 
 _HOTSPOT_FUNCS = {"fetch_hotspots"}
 
-__all__ = sorted(_AIR_QUALITY_FUNCS | _CWFIS_FUNCS | _HOTSPOT_FUNCS)
+_WEATHER_STATION_FUNCS = {
+    "fetch_climate_stations",
+    "find_nearest_stations", 
+    "get_station_weather_data",
+    "get_multi_station_data",
+    "weather_station_workflow",
+}
+
+__all__ = sorted(_AIR_QUALITY_FUNCS | _CWFIS_FUNCS | _HOTSPOT_FUNCS | _WEATHER_STATION_FUNCS)
 
 
 def __getattr__(name: str):
@@ -43,5 +59,8 @@ def __getattr__(name: str):
         return getattr(module, name)
     if name in _CWFIS_FUNCS:
         module = import_module(".cwfis", __name__)
+        return getattr(module, name)
+    if name in _WEATHER_STATION_FUNCS:
+        module = import_module(".weather_stations", __name__)
         return getattr(module, name)
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

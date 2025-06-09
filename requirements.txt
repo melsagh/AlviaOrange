@@ -8,3 +8,8 @@ pyshp
 pyproj
 plotly
 
+# Weather station functionality dependencies  
+pandas
+geopandas
+geopy
+numpy

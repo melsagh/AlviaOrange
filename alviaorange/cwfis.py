@@ -104,3 +104,152 @@ def fire_danger_wms_tile_url(date: str | int) -> str:
         "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
         "width=256&height=256"
     )
+
+
+def fire_weather_index_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for Fire Weather Index.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used by the WMS layer names.
+    """
+
+    date_str = str(date)
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        f"layers=public:fwi{date_str}&"
+        "styles=cffdrs_fwi_opaque&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def fire_perimeter_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for Fire Perimeter.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used for the CQL filter.
+    """
+
+    date_str = str(date)
+    # Convert YYYYMMDD to YYYY-MM-DD format for the CQL filter
+    formatted_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
+    
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        "layers=public:m3_polygons&"
+        f"cql_filter=mindate <= '{formatted_date} 12:00:00' and maxdate >= '{formatted_date} 12:00:00'&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def m3_hotspots_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for M3 Hotspots.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used by the WMS layer names.
+    """
+
+    date_str = str(date)
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        f"layers=public:m3_hotspots{date_str}&"
+        "styles=hotspots&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def season_hotspots_wms_tile_url(year: int) -> str:
+    """Return WMS tile URL template for Season Hotspots.
+
+    Parameters
+    ----------
+    year:
+        Year for the season hotspots.
+    """
+
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        f"layers=public:season_hotspots{year}&"
+        "styles=hotspots&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def active_fires_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for Active Fires.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used for the CQL filter.
+    """
+
+    date_str = str(date)
+    # Convert YYYYMMDD to YYYY-MM-DD format for the CQL filter
+    formatted_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
+    
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        "layers=public:activefires&"
+        "styles=cwfis_activefires_bysizeandsoc&"
+        f"cql_filter=first_rep_date <= '{formatted_date} 23:59:59' and last_rep_date >= '{formatted_date} 00:00:00' and icon <> 'ex' and hectares > 1&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def forecast_weather_stations_wms_tile_url() -> str:
+    """Return WMS tile URL template for Forecast Weather Stations."""
+
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        "layers=public:forecast_stations&"
+        "styles=weather_stations&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
+
+
+def reporting_weather_stations_wms_tile_url(date: str | int) -> str:
+    """Return WMS tile URL template for Reporting Weather Stations.
+
+    Parameters
+    ----------
+    date:
+        Date in ``YYYYMMDD`` format used for the CQL filter.
+    """
+
+    date_str = str(date)
+    # Convert YYYYMMDD to YYYY-MM-DD format for the CQL filter
+    formatted_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
+    
+    return (
+        "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wms?"
+        "service=WMS&version=1.1.1&request=GetMap&"
+        "layers=public:firewx_stns_2022&"
+        f"cql_filter=rep_date = '{formatted_date} 12:00:00'&"
+        "format=image/png&transparent=true&"
+        "srs=EPSG:3857&bbox={bbox-epsg-3857}&"
+        "width=256&height=256"
+    )
