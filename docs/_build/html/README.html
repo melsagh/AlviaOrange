@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlviaOrange Documentation &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=449cabca" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/schemas.html">Schemas Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">AlviaOrange Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/your-github-username/AlviaOrange/blob/main/docs/README.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="alviaorange-documentation">
+<h1>AlviaOrange Documentation<a class="headerlink" href="#alviaorange-documentation" title="Link to this heading"></a></h1>
+<p>This directory contains the Sphinx-based documentation for AlviaOrange. The documentation is automatically built and deployed to GitHub Pages.</p>
+<section id="documentation-structure">
+<h2>🏗️ Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/
+├── conf.py                 # Sphinx configuration
+├── index.rst              # Main documentation index
+├── installation.rst       # Installation guide
+├── quickstart.rst         # Quick start guide
+├── api/                   # API reference documentation
+│   ├── modules.rst        # Module overview
+│   ├── hotspots.rst       # Hotspots module docs
+│   └── schemas.rst        # Schemas module docs
+├── _static/               # Static files (CSS, images)
+│   └── custom.css         # Custom styling
+├── _build/                # Built documentation (generated)
+└── Makefile              # Build commands
+
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p>Install documentation dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt
+</pre></div>
+</div>
+</section>
+<section id="building-documentation">
+<h3>Building Documentation<a class="headerlink" href="#building-documentation" title="Link to this heading"></a></h3>
+<p>Build HTML documentation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
+make<span class="w"> </span>html
+</pre></div>
+</div>
+<p>Serve locally for development:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>serve
+<span class="c1"># Open http://localhost:8000 in your browser</span>
+</pre></div>
+</div>
+</section>
+<section id="live-development">
+<h3>Live Development<a class="headerlink" href="#live-development" title="Link to this heading"></a></h3>
+<p>For live reloading during development:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install sphinx-autobuild</span>
+pip<span class="w"> </span>install<span class="w"> </span>sphinx-autobuild
+
+<span class="c1"># Start live server</span>
+make<span class="w"> </span>livehtml
+<span class="c1"># Open http://localhost:8000 in your browser</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="writing-documentation">
+<h2>📝 Writing Documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading"></a></h2>
+<section id="adding-new-pages">
+<h3>Adding New Pages<a class="headerlink" href="#adding-new-pages" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Create a new <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file in the appropriate directory</p></li>
+<li><p>Add it to the relevant <code class="docutils literal notranslate"><span class="pre">toctree</span></code> in <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> or other parent files</p></li>
+<li><p>Use proper reStructuredText formatting</p></li>
+</ol>
+</section>
+<section id="api-documentation">
+<h3>API Documentation<a class="headerlink" href="#api-documentation" title="Link to this heading"></a></h3>
+<p>API documentation is automatically generated from docstrings using Sphinx autodoc:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">example_function</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Brief description of the function.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        param1: Description of param1</span>
+<span class="sd">        param2: Description of param2 with default value</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Description of return value</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: When param1 is invalid</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; result = example_function(&quot;test&quot;, 20)</span>
+<span class="sd">        &gt;&gt;&gt; print(result)</span>
+<span class="sd">        {&#39;status&#39;: &#39;success&#39;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="code-examples">
+<h3>Code Examples<a class="headerlink" href="#code-examples" title="Link to this heading"></a></h3>
+<p>Use code blocks with syntax highlighting:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> <span class="k">python</span>
+
+   <span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.hotspots</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_hotspots_for_zone</span>
+   
+   <span class="n">result</span> <span class="o">=</span> <span class="n">detect_hotspots_for_zone</span><span class="p">(</span>
+       <span class="n">zone_bounds</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;north&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;south&#39;</span><span class="p">:</span> <span class="mi">49</span><span class="p">,</span> <span class="s1">&#39;east&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="s1">&#39;west&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">121</span><span class="p">},</span>
+       <span class="n">time_range</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;start_date&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-01-01T00:00:00Z&#39;</span><span class="p">,</span> <span class="s1">&#39;end_date&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-01-02T00:00:00Z&#39;</span><span class="p">}</span>
+   <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="jupyter-notebooks">
+<h3>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h3>
+<p>Jupyter notebooks in the <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> directory are automatically included:</p>
+<ol class="arabic simple">
+<li><p>Place notebooks in <code class="docutils literal notranslate"><span class="pre">../notebooks/</span></code></p></li>
+<li><p>Reference them in documentation:</p></li>
+</ol>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
+   <span class="nc">:maxdepth:</span> 2
+   
+<span class="c">   ../notebooks/01-data-scientist-workflow</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="styling">
+<h2>🎨 Styling<a class="headerlink" href="#styling" title="Link to this heading"></a></h2>
+<section id="custom-css">
+<h3>Custom CSS<a class="headerlink" href="#custom-css" title="Link to this heading"></a></h3>
+<p>Custom styling is defined in <code class="docutils literal notranslate"><span class="pre">_static/custom.css</span></code> with Alvia brand colors:</p>
+<ul class="simple">
+<li><p>Orange: <code class="docutils literal notranslate"><span class="pre">#FF6B35</span></code></p></li>
+<li><p>Blue: <code class="docutils literal notranslate"><span class="pre">#2980B9</span></code></p></li>
+<li><p>Dark: <code class="docutils literal notranslate"><span class="pre">#2C3E50</span></code></p></li>
+<li><p>Light: <code class="docutils literal notranslate"><span class="pre">#ECF0F1</span></code></p></li>
+</ul>
+</section>
+<section id="theme-configuration">
+<h3>Theme Configuration<a class="headerlink" href="#theme-configuration" title="Link to this heading"></a></h3>
+<p>The documentation uses the Read the Docs theme with custom configuration in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>.</p>
+</section>
+</section>
+<section id="build-commands">
+<h2>🔧 Build Commands<a class="headerlink" href="#build-commands" title="Link to this heading"></a></h2>
+<section id="available-make-targets">
+<h3>Available Make Targets<a class="headerlink" href="#available-make-targets" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Basic commands</span>
+make<span class="w"> </span>html<span class="w">          </span><span class="c1"># Build HTML documentation</span>
+make<span class="w"> </span>clean<span class="w">         </span><span class="c1"># Clean build directory</span>
+make<span class="w"> </span>serve<span class="w">         </span><span class="c1"># Serve built docs locally</span>
+
+<span class="c1"># Development commands</span>
+make<span class="w"> </span>livehtml<span class="w">      </span><span class="c1"># Live reload server</span>
+make<span class="w"> </span>clean-all<span class="w">     </span><span class="c1"># Clean everything including generated files</span>
+make<span class="w"> </span>strict<span class="w">        </span><span class="c1"># Build with warnings as errors</span>
+make<span class="w"> </span>linkcheck<span class="w">     </span><span class="c1"># Check for broken links</span>
+
+<span class="c1"># API documentation</span>
+make<span class="w"> </span>apidoc<span class="w">        </span><span class="c1"># Generate API docs from source</span>
+make<span class="w"> </span>rebuild<span class="w">       </span><span class="c1"># Full rebuild with API docs</span>
+
+<span class="c1"># Quality checks</span>
+make<span class="w"> </span>coverage<span class="w">      </span><span class="c1"># Check docstring coverage</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-sphinx-commands">
+<h3>Manual Sphinx Commands<a class="headerlink" href="#manual-sphinx-commands" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build HTML</span>
+sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
+
+<span class="c1"># Build with warnings as errors</span>
+sphinx-build<span class="w"> </span>-W<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
+
+<span class="c1"># Check links</span>
+sphinx-build<span class="w"> </span>-b<span class="w"> </span>linkcheck<span class="w"> </span>.<span class="w"> </span>_build/linkcheck
+
+<span class="c1"># Generate API docs</span>
+sphinx-apidoc<span class="w"> </span>-o<span class="w"> </span>api/<span class="w"> </span>../alviaorange/<span class="w"> </span>--force<span class="w"> </span>--module-first
+</pre></div>
+</div>
+</section>
+</section>
+<section id="deployment">
+<h2>🚀 Deployment<a class="headerlink" href="#deployment" title="Link to this heading"></a></h2>
+<section id="github-pages-automatic">
+<h3>GitHub Pages (Automatic)<a class="headerlink" href="#github-pages-automatic" title="Link to this heading"></a></h3>
+<p>Documentation is automatically deployed to GitHub Pages via GitHub Actions:</p>
+<ol class="arabic simple">
+<li><p>Push changes to <code class="docutils literal notranslate"><span class="pre">main</span></code> branch</p></li>
+<li><p>GitHub Actions builds documentation</p></li>
+<li><p>Deploys to <code class="docutils literal notranslate"><span class="pre">https://your-username.github.io/AlviaOrange/</span></code></p></li>
+</ol>
+</section>
+<section id="manual-deployment">
+<h3>Manual Deployment<a class="headerlink" href="#manual-deployment" title="Link to this heading"></a></h3>
+<p>For manual deployment to other platforms:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build documentation</span>
+make<span class="w"> </span>html
+
+<span class="c1"># Deploy _build/html/ directory to your hosting platform</span>
+rsync<span class="w"> </span>-av<span class="w"> </span>_build/html/<span class="w"> </span>user@server:/path/to/docs/
+</pre></div>
+</div>
+</section>
+</section>
+<section id="quality-checks">
+<h2>📊 Quality Checks<a class="headerlink" href="#quality-checks" title="Link to this heading"></a></h2>
+<section id="docstring-coverage">
+<h3>Docstring Coverage<a class="headerlink" href="#docstring-coverage" title="Link to this heading"></a></h3>
+<p>Check documentation coverage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>interrogate
+make<span class="w"> </span>coverage
+</pre></div>
+</div>
+<p>Target: 80% docstring coverage</p>
+</section>
+<section id="link-checking">
+<h3>Link Checking<a class="headerlink" href="#link-checking" title="Link to this heading"></a></h3>
+<p>Check for broken links:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>linkcheck
+</pre></div>
+</div>
+</section>
+<section id="build-validation">
+<h3>Build Validation<a class="headerlink" href="#build-validation" title="Link to this heading"></a></h3>
+<p>Ensure documentation builds without warnings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>strict
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>🔍 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading"></a></h3>
+<p><strong>Import Errors</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure package is installed in development mode</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>..
+</pre></div>
+</div>
+<p><strong>Missing Dependencies</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install all documentation dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt
+</pre></div>
+</div>
+<p><strong>Build Failures</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean and rebuild</span>
+make<span class="w"> </span>clean-all
+make<span class="w"> </span>rebuild
+</pre></div>
+</div>
+<p><strong>Broken Links</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check and fix broken links</span>
+make<span class="w"> </span>linkcheck
+</pre></div>
+</div>
+</section>
+<section id="performance-issues">
+<h3>Performance Issues<a class="headerlink" href="#performance-issues" title="Link to this heading"></a></h3>
+<p>For large documentation builds:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parallel builds (if supported)</span>
+make<span class="w"> </span>html<span class="w"> </span><span class="nv">SPHINXOPTS</span><span class="o">=</span><span class="s2">&quot;-j auto&quot;</span>
+
+<span class="c1"># Skip notebook execution</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">NBSPHINX_EXECUTE</span><span class="o">=</span>never
+make<span class="w"> </span>html
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>📚 Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.sphinx-doc.org/">Sphinx Documentation</a></p></li>
+<li><p><a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">reStructuredText Primer</a></p></li>
+<li><p><a class="reference external" href="https://sphinx-rtd-theme.readthedocs.io/">Read the Docs Theme</a></p></li>
+<li><p><a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html">Sphinx AutoDoc</a></p></li>
+<li><p><a class="reference external" href="https://pages.github.com/">GitHub Pages</a></p></li>
+</ul>
+</section>
+<section id="contributing">
+<h2>🤝 Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>When contributing to documentation:</p>
+<ol class="arabic simple">
+<li><p>Follow the existing structure and style</p></li>
+<li><p>Test builds locally before submitting</p></li>
+<li><p>Ensure all links work</p></li>
+<li><p>Add examples for new features</p></li>
+<li><p>Update API documentation for code changes</p></li>
+</ol>
+<p>For more details, see the main <a class="reference internal" href="#../CONTRIBUTING.md"><span class="xref myst">Contributing Guide</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
