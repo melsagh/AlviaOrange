@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>schemas &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=449cabca" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/schemas.html">Schemas Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">schemas</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for schemas</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># ENUMS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="HotspotSource">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.HotspotSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HotspotSource</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">FIRMS</span> <span class="o">=</span> <span class="s2">&quot;FIRMS&quot;</span>
+    <span class="n">VIIRS</span> <span class="o">=</span> <span class="s2">&quot;VIIRS&quot;</span>
+    <span class="n">MODIS</span> <span class="o">=</span> <span class="s2">&quot;MODIS&quot;</span>
+    <span class="n">GFW</span> <span class="o">=</span> <span class="s2">&quot;GFW&quot;</span>
+    <span class="n">MANUAL</span> <span class="o">=</span> <span class="s2">&quot;manual&quot;</span></div>
+
+
+<div class="viewcode-block" id="RiskLevel">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.RiskLevel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RiskLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+    <span class="n">MODERATE</span> <span class="o">=</span> <span class="s2">&quot;moderate&quot;</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+    <span class="n">EXTREME</span> <span class="o">=</span> <span class="s2">&quot;extreme&quot;</span></div>
+
+
+<div class="viewcode-block" id="DrynessLevel">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.DrynessLevel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrynessLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+    <span class="n">MODERATE</span> <span class="o">=</span> <span class="s2">&quot;moderate&quot;</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+    <span class="n">SEVERE</span> <span class="o">=</span> <span class="s2">&quot;severe&quot;</span></div>
+
+
+<div class="viewcode-block" id="FuelModel">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FuelModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FuelModel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="c1"># Anderson 13 Fire Behavior Fuel Models</span>
+    <span class="n">GR1</span> <span class="o">=</span> <span class="s2">&quot;GR1&quot;</span>  <span class="c1"># Short, sparse dry climate grass</span>
+    <span class="n">GR2</span> <span class="o">=</span> <span class="s2">&quot;GR2&quot;</span>  <span class="c1"># Low load, dry climate grass</span>
+    <span class="n">GS1</span> <span class="o">=</span> <span class="s2">&quot;GS1&quot;</span>  <span class="c1"># Low load, dry climate grass-shrub</span>
+    <span class="n">GS2</span> <span class="o">=</span> <span class="s2">&quot;GS2&quot;</span>  <span class="c1"># Moderate load, dry climate grass-shrub</span>
+    <span class="n">SH1</span> <span class="o">=</span> <span class="s2">&quot;SH1&quot;</span>  <span class="c1"># Low load dry climate shrub</span>
+    <span class="n">SH2</span> <span class="o">=</span> <span class="s2">&quot;SH2&quot;</span>  <span class="c1"># Moderate load dry climate shrub</span>
+    <span class="n">TU1</span> <span class="o">=</span> <span class="s2">&quot;TU1&quot;</span>  <span class="c1"># Low load dry climate timber-understory</span>
+    <span class="n">TL1</span> <span class="o">=</span> <span class="s2">&quot;TL1&quot;</span>  <span class="c1"># Low load broadleaf litter</span></div>
+
+    <span class="c1"># Add more as needed</span>
+
+<div class="viewcode-block" id="AlertType">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.AlertType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AlertType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">HOTSPOT_DETECTED</span> <span class="o">=</span> <span class="s2">&quot;hotspot_detected&quot;</span>
+    <span class="n">RISK_LEVEL_CHANGE</span> <span class="o">=</span> <span class="s2">&quot;risk_level_change&quot;</span>
+    <span class="n">EXTREME_WEATHER</span> <span class="o">=</span> <span class="s2">&quot;extreme_weather&quot;</span>
+    <span class="n">CRITICAL_FUEL_MOISTURE</span> <span class="o">=</span> <span class="s2">&quot;critical_fuel_moisture&quot;</span></div>
+
+
+<div class="viewcode-block" id="AlertSeverity">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.AlertSeverity">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AlertSeverity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;critical&quot;</span></div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># CORE DATA MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="ZoneBounds">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.ZoneBounds">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZoneBounds</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Geographical bounds for a zone.&quot;&quot;&quot;</span>
+    <span class="n">north</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">south</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">east</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">west</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="ZoneBounds.north_must_be_greater_than_south">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.ZoneBounds.north_must_be_greater_than_south">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;north&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">north_must_be_greater_than_south</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;south&#39;</span> <span class="ow">in</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;south&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;north must be greater than south&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Coordinates">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.Coordinates">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Coordinates</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple latitude/longitude coordinates.&quot;&quot;&quot;</span>
+    <span class="n">latitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeRange">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.TimeRange">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimeRange</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time range for data queries.&quot;&quot;&quot;</span>
+    <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span>
+    
+<div class="viewcode-block" id="TimeRange.end_date_must_be_after_start_date">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.TimeRange.end_date_must_be_after_start_date">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;end_date&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">end_date_must_be_after_start_date</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;start_date&#39;</span> <span class="ow">in</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;end_date must be after start_date&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># HOTSPOT MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="HotspotMetadata">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.HotspotMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HotspotMetadata</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Additional metadata for hotspot detections.&quot;&quot;&quot;</span>
+    <span class="n">satellite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">scan_angle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">brightness_temp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Hotspot">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.Hotspot">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Hotspot</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a single wildfire hotspot detection.&quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">zone_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">latitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">frp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fire Radiative Power in MW&quot;</span><span class="p">)</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">HotspotSource</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HotspotMetadata</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Hotspot.Config">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.Hotspot.Config">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div>
+</div>
+
+
+<div class="viewcode-block" id="HotspotQueryResult">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.HotspotQueryResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HotspotQueryResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of a hotspot query.&quot;&quot;&quot;</span>
+    <span class="n">hotspots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Hotspot</span><span class="p">]</span>
+    <span class="n">total_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">query_time</span><span class="p">:</span> <span class="n">datetime</span></div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># WEATHER MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="FireWeatherIndex">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FireWeatherIndex">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FireWeatherIndex</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fire Weather Index components.&quot;&quot;&quot;</span>
+    <span class="n">ffmc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fine Fuel Moisture Code&quot;</span><span class="p">)</span>
+    <span class="n">dmc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Duff Moisture Code&quot;</span><span class="p">)</span>
+    <span class="n">dc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Drought Code&quot;</span><span class="p">)</span>
+    <span class="n">isi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Initial Spread Index&quot;</span><span class="p">)</span>
+    <span class="n">bui</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Buildup Index&quot;</span><span class="p">)</span>
+    <span class="n">fwi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fire Weather Index&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WeatherData">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.WeatherData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WeatherData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Current weather data relevant to fire risk.&quot;&quot;&quot;</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Temperature in Celsius&quot;</span><span class="p">)</span>
+    <span class="n">humidity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Relative humidity %&quot;</span><span class="p">)</span>
+    <span class="n">wind_speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Wind speed in km/h&quot;</span><span class="p">)</span>
+    <span class="n">wind_direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Wind direction in degrees&quot;</span><span class="p">)</span>
+    <span class="n">precipitation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Precipitation in mm&quot;</span><span class="p">)</span>
+    <span class="n">pressure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Atmospheric pressure in hPa&quot;</span><span class="p">)</span>
+    <span class="n">visibility</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Visibility in km&quot;</span><span class="p">)</span>
+    <span class="n">fire_weather_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FireWeatherIndex</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span></div>
+
+
+<div class="viewcode-block" id="WeatherForecast">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.WeatherForecast">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WeatherForecast</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Weather forecast data.&quot;&quot;&quot;</span>
+    <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">temperature_max</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">temperature_min</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">humidity</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">wind_speed</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">wind_direction</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">precipitation_probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">precipitation_amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># RISK ASSESSMENT MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="ZoneData">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.ZoneData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZoneData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Zone-specific data for risk assessment.&quot;&quot;&quot;</span>
+    <span class="n">bounds</span><span class="p">:</span> <span class="n">ZoneBounds</span>
+    <span class="n">area_km2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VegetationData">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.VegetationData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VegetationData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vegetation data for risk assessment.&quot;&quot;&quot;</span>
+    <span class="n">ndvi</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Normalized Difference Vegetation Index&quot;</span><span class="p">)</span>
+    <span class="n">moisture_content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Vegetation moisture %&quot;</span><span class="p">)</span>
+    <span class="n">fuel_load</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fuel load in tons/hectare&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TopographyData">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.TopographyData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TopographyData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Topography data for risk assessment.&quot;&quot;&quot;</span>
+    <span class="n">elevation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Elevation in meters&quot;</span><span class="p">)</span>
+    <span class="n">slope</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Slope in degrees&quot;</span><span class="p">)</span>
+    <span class="n">aspect</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Aspect in degrees&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RiskFactors">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.RiskFactors">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RiskFactors</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detailed risk factors breakdown.&quot;&quot;&quot;</span>
+    <span class="n">temperature_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">humidity_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">wind_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fuel_moisture_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">drought_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">slope_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RiskAssessment">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.RiskAssessment">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RiskAssessment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fire risk assessment result.&quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">zone_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">risk_score</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">risk_level</span><span class="p">:</span> <span class="n">RiskLevel</span>
+    <span class="n">weather_risk</span><span class="p">:</span> <span class="n">RiskLevel</span>
+    <span class="n">vegetation_dryness</span><span class="p">:</span> <span class="n">DrynessLevel</span>
+    <span class="n">factors</span><span class="p">:</span> <span class="n">RiskFactors</span>
+    <span class="n">recommendations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="RiskAssessment.Config">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.RiskAssessment.Config">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+        <span class="n">orm_mode</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div>
+</div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># FIRE BEHAVIOR MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="FireSpreadPolygon">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FireSpreadPolygon">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FireSpreadPolygon</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fire spread polygon for a specific time.&quot;&quot;&quot;</span>
+    <span class="n">time_hours</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">perimeter</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Coordinates</span><span class="p">]</span>
+    <span class="n">area_hectares</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FireSpreadPrediction">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FireSpreadPrediction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FireSpreadPrediction</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fire spread prediction result.&quot;&quot;&quot;</span>
+    <span class="n">spread_polygons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FireSpreadPolygon</span><span class="p">]</span>
+    <span class="n">max_spread_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Maximum spread rate in m/min&quot;</span><span class="p">)</span>
+    <span class="n">flame_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Flame length in meters&quot;</span><span class="p">)</span>
+    <span class="n">fire_intensity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fire intensity in kW/m&quot;</span><span class="p">)</span>
+    <span class="n">model_used</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># FUEL ANALYSIS MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="FuelAnalysis">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FuelAnalysis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FuelAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fuel load analysis result.&quot;&quot;&quot;</span>
+    <span class="n">fuel_load_tons_per_hectare</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">fuel_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fuel_model</span><span class="p">:</span> <span class="n">FuelModel</span>
+    <span class="n">live_fuel_moisture</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">dead_fuel_moisture</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">analysis_date</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data_source</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="FuelAnalysis.Config">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.FuelAnalysis.Config">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div>
+</div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># ALERT SYSTEM MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="AlertData">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.AlertData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AlertData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Alert-specific data.&quot;&quot;&quot;</span>
+    <span class="n">hotspot_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">max_confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">risk_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Alert">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.Alert">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Alert</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fire alert notification.&quot;&quot;&quot;</span>
+    <span class="n">alert_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">zone_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">alert_type</span><span class="p">:</span> <span class="n">AlertType</span>
+    <span class="n">severity</span><span class="p">:</span> <span class="n">AlertSeverity</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">AlertData</span>
+    <span class="n">actions_required</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Alert.Config">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.Alert.Config">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div>
+</div>
+
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># API RESPONSE MODELS</span>
+<span class="c1"># ============================================================================</span>
+
+<div class="viewcode-block" id="APIResponse">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.APIResponse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">APIResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base API response model.&quot;&quot;&quot;</span>
+    <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ErrorResponse">
+<a class="viewcode-back" href="../api/_autosummary/alviaorange.schemas.html#schemas.ErrorResponse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ErrorResponse</span><span class="p">(</span><span class="n">APIResponse</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error response model.&quot;&quot;&quot;</span>
+    <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">error_code</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span> </div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

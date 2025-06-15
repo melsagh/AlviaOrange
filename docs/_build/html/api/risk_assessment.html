@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk Assessment Module &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=449cabca" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="alviaorange.schemas" href="_autosummary/alviaorange.schemas.html" />
+    <link rel="prev" title="Hotspots Module" href="hotspots.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schemas.html">Schemas Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Risk Assessment Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.risk_assessment.RiskAssessmentError"><code class="docutils literal notranslate"><span class="pre">RiskAssessmentError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.risk_assessment.calculate_fire_risk_score"><code class="docutils literal notranslate"><span class="pre">calculate_fire_risk_score()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-functions">Core Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fire-risk-calculation">Fire Risk Calculation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">calculate_fire_risk_score()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weather-index-calculation">Weather Index Calculation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#risk-assessment-components">Risk Assessment Components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#weather-factors">Weather Factors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vegetation-factors">Vegetation Factors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#topographical-factors">Topographical Factors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#risk-calculation-algorithm">Risk Calculation Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-targets">Performance Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-examples">Integration Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-integration">API Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#validation-and-testing">Validation and Testing</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Risk Assessment Module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/your-github-username/AlviaOrange/blob/main/docs/api/risk_assessment.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-alviaorange.risk_assessment">
+<span id="risk-assessment-module"></span><h1>Risk Assessment Module<a class="headerlink" href="#module-alviaorange.risk_assessment" title="Link to this heading"></a></h1>
+<p>Fire risk assessment module for calculating comprehensive fire risk scores.</p>
+<p>This module provides functions to calculate fire risk based on multiple factors
+including weather conditions, vegetation data, and topographical information.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="alviaorange.risk_assessment.RiskAssessmentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">alviaorange.risk_assessment.</span></span><span class="sig-name descname"><span class="pre">RiskAssessmentError</span></span><a class="reference internal" href="../_modules/alviaorange/risk_assessment.html#RiskAssessmentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.risk_assessment.RiskAssessmentError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Custom exception for risk assessment errors.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.risk_assessment.calculate_fire_risk_score">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.risk_assessment.</span></span><span class="sig-name descname"><span class="pre">calculate_fire_risk_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weather_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vegetation_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topography_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/risk_assessment.html#calculate_fire_risk_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.risk_assessment.calculate_fire_risk_score" title="Link to this definition"></a></dt>
+<dd><p>Calculate comprehensive fire risk score using multiple factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Zone information including bounds and area</p></li>
+<li><p><strong>weather_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Current weather conditions</p></li>
+<li><p><strong>vegetation_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Vegetation moisture and fuel load data</p></li>
+<li><p><strong>topography_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span>) – Optional topographical information</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing risk assessment results</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#alviaorange.risk_assessment.RiskAssessmentError" title="alviaorange.risk_assessment.RiskAssessmentError"><strong>RiskAssessmentError</strong></a> – When risk calculation fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When input parameters are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The risk assessment module provides comprehensive fire risk calculation and analysis capabilities. It combines weather data, vegetation conditions, and topographical factors to produce accurate fire risk assessments.</p>
+<section id="core-functions">
+<h2>Core Functions<a class="headerlink" href="#core-functions" title="Link to this heading"></a></h2>
+<section id="fire-risk-calculation">
+<h3>Fire Risk Calculation<a class="headerlink" href="#fire-risk-calculation" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.risk_assessment.</span></span><span class="sig-name descname"><span class="pre">calculate_fire_risk_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weather_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vegetation_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topography_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/risk_assessment.html#calculate_fire_risk_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Calculate comprehensive fire risk score using multiple factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Zone information including bounds and area</p></li>
+<li><p><strong>weather_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Current weather conditions</p></li>
+<li><p><strong>vegetation_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span>) – Vegetation moisture and fuel load data</p></li>
+<li><p><strong>topography_data</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span>) – Optional topographical information</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing risk assessment results</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#alviaorange.risk_assessment.RiskAssessmentError" title="alviaorange.risk_assessment.RiskAssessmentError"><strong>RiskAssessmentError</strong></a> – When risk calculation fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When input parameters are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>This is the primary function for calculating fire risk scores. It integrates multiple data sources and applies sophisticated algorithms to produce reliable risk assessments.</p>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.risk_assessment</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_fire_risk_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="c1"># Define zone data</span>
+<span class="n">zone_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;north&quot;</span><span class="p">:</span> <span class="mf">50.0</span><span class="p">,</span>
+        <span class="s2">&quot;south&quot;</span><span class="p">:</span> <span class="mf">49.0</span><span class="p">,</span>
+        <span class="s2">&quot;east&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">120.0</span><span class="p">,</span>
+        <span class="s2">&quot;west&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">121.0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;area_km2&quot;</span><span class="p">:</span> <span class="mf">100.0</span>
+<span class="p">}</span>
+
+<span class="c1"># Define weather conditions</span>
+<span class="n">weather_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span>      <span class="c1"># High temperature increases risk</span>
+    <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="mf">15.0</span><span class="p">,</span>         <span class="c1"># Low humidity increases risk</span>
+    <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="mf">25.0</span><span class="p">,</span>       <span class="c1"># High wind speed increases risk</span>
+    <span class="s2">&quot;wind_direction&quot;</span><span class="p">:</span> <span class="mf">225.0</span><span class="p">,</span>  <span class="c1"># Southwest wind</span>
+    <span class="s2">&quot;precipitation&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>     <span class="c1"># No recent precipitation</span>
+    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+<span class="p">}</span>
+
+<span class="c1"># Define vegetation conditions</span>
+<span class="n">vegetation_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;moisture_content&quot;</span><span class="p">:</span> <span class="mf">8.0</span><span class="p">,</span>  <span class="c1"># Very dry vegetation</span>
+    <span class="s2">&quot;fuel_load&quot;</span><span class="p">:</span> <span class="mf">2.5</span>         <span class="c1"># Moderate fuel load</span>
+<span class="p">}</span>
+
+<span class="c1"># Calculate risk</span>
+<span class="n">risk_result</span> <span class="o">=</span> <span class="n">calculate_fire_risk_score</span><span class="p">(</span>
+    <span class="n">zone_data</span><span class="o">=</span><span class="n">zone_data</span><span class="p">,</span>
+    <span class="n">weather_data</span><span class="o">=</span><span class="n">weather_data</span><span class="p">,</span>
+    <span class="n">vegetation_data</span><span class="o">=</span><span class="n">vegetation_data</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Risk Level: </span><span class="si">{</span><span class="n">risk_result</span><span class="p">[</span><span class="s1">&#39;risk_level&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Risk Score: </span><span class="si">{</span><span class="n">risk_result</span><span class="p">[</span><span class="s1">&#39;risk_score&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/100&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Contributing Factors:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">factor</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">risk_result</span><span class="p">[</span><span class="s1">&#39;contributing_factors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">factor</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="weather-index-calculation">
+<h3>Weather Index Calculation<a class="headerlink" href="#weather-index-calculation" title="Link to this heading"></a></h3>
+<p>Calculates the Fire Weather Index (FWI) based on meteorological conditions.</p>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.risk_assessment</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fire_weather_index</span>
+
+<span class="n">weather_conditions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="mf">25.0</span><span class="p">,</span>
+    <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+    <span class="s2">&quot;precipitation&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+<span class="p">}</span>
+
+<span class="n">fwi_result</span> <span class="o">=</span> <span class="n">get_fire_weather_index</span><span class="p">(</span><span class="n">weather_conditions</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fire Weather Index: </span><span class="si">{</span><span class="n">fwi_result</span><span class="p">[</span><span class="s1">&#39;fwi_value&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Danger Class: </span><span class="si">{</span><span class="n">fwi_result</span><span class="p">[</span><span class="s1">&#39;danger_class&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Components:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Fine Fuel Moisture Code: </span><span class="si">{</span><span class="n">fwi_result</span><span class="p">[</span><span class="s1">&#39;ffmc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Duff Moisture Code: </span><span class="si">{</span><span class="n">fwi_result</span><span class="p">[</span><span class="s1">&#39;dmc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Drought Code: </span><span class="si">{</span><span class="n">fwi_result</span><span class="p">[</span><span class="s1">&#39;dc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="risk-assessment-components">
+<h2>Risk Assessment Components<a class="headerlink" href="#risk-assessment-components" title="Link to this heading"></a></h2>
+<section id="weather-factors">
+<h3>Weather Factors<a class="headerlink" href="#weather-factors" title="Link to this heading"></a></h3>
+<p>The risk assessment considers multiple weather factors:</p>
+<dl class="simple">
+<dt><strong>Temperature</strong></dt><dd><ul class="simple">
+<li><p>Higher temperatures increase fire risk</p></li>
+<li><p>Critical threshold: 30°C+</p></li>
+<li><p>Extreme conditions: 40°C+</p></li>
+</ul>
+</dd>
+<dt><strong>Humidity</strong></dt><dd><ul class="simple">
+<li><p>Lower humidity increases fire risk</p></li>
+<li><p>Critical threshold: &lt;30%</p></li>
+<li><p>Extreme conditions: &lt;15%</p></li>
+</ul>
+</dd>
+<dt><strong>Wind Speed</strong></dt><dd><ul class="simple">
+<li><p>Higher wind speeds increase fire spread risk</p></li>
+<li><p>Critical threshold: 20 km/h+</p></li>
+<li><p>Extreme conditions: 40 km/h+</p></li>
+</ul>
+</dd>
+<dt><strong>Precipitation</strong></dt><dd><ul class="simple">
+<li><p>Recent precipitation reduces fire risk</p></li>
+<li><p>Significant impact: &gt;5mm in 24 hours</p></li>
+<li><p>Major impact: &gt;20mm in 48 hours</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="vegetation-factors">
+<h3>Vegetation Factors<a class="headerlink" href="#vegetation-factors" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Moisture Content</strong></dt><dd><ul class="simple">
+<li><p>Lower moisture content increases fire risk</p></li>
+<li><p>Critical threshold: &lt;15%</p></li>
+<li><p>Extreme conditions: &lt;8%</p></li>
+</ul>
+</dd>
+<dt><strong>Fuel Load</strong></dt><dd><ul class="simple">
+<li><p>Higher fuel loads increase fire intensity potential</p></li>
+<li><p>Measured in kg/m²</p></li>
+<li><p>Critical threshold: &gt;2.0 kg/m²</p></li>
+</ul>
+</dd>
+<dt><strong>Vegetation Type</strong></dt><dd><ul class="simple">
+<li><p>Different vegetation types have different fire characteristics</p></li>
+<li><p>Coniferous forests: Higher risk</p></li>
+<li><p>Grasslands: Fast spread, lower intensity</p></li>
+<li><p>Mixed forests: Variable risk</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="topographical-factors">
+<h3>Topographical Factors<a class="headerlink" href="#topographical-factors" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Slope</strong></dt><dd><ul class="simple">
+<li><p>Steeper slopes increase fire spread rate</p></li>
+<li><p>Critical threshold: &gt;30% grade</p></li>
+<li><p>Fire spreads faster uphill</p></li>
+</ul>
+</dd>
+<dt><strong>Aspect</strong></dt><dd><ul class="simple">
+<li><p>South-facing slopes receive more solar radiation</p></li>
+<li><p>Affects vegetation moisture and fire behavior</p></li>
+</ul>
+</dd>
+<dt><strong>Elevation</strong></dt><dd><ul class="simple">
+<li><p>Affects weather patterns and vegetation types</p></li>
+<li><p>Higher elevations may have different risk profiles</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="risk-calculation-algorithm">
+<h2>Risk Calculation Algorithm<a class="headerlink" href="#risk-calculation-algorithm" title="Link to this heading"></a></h2>
+<p>The risk calculation uses a weighted scoring system:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simplified risk calculation formula</span>
+<span class="n">base_score</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">temperature_factor</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">+</span>
+    <span class="n">humidity_factor</span> <span class="o">*</span> <span class="mf">0.20</span> <span class="o">+</span>
+    <span class="n">wind_factor</span> <span class="o">*</span> <span class="mf">0.20</span> <span class="o">+</span>
+    <span class="n">vegetation_factor</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">+</span>
+    <span class="n">precipitation_factor</span> <span class="o">*</span> <span class="mf">0.10</span>
+<span class="p">)</span>
+
+<span class="c1"># Apply modifiers</span>
+<span class="n">final_score</span> <span class="o">=</span> <span class="n">base_score</span> <span class="o">*</span> <span class="n">topographical_modifier</span>
+
+<span class="c1"># Determine risk level</span>
+<span class="k">if</span> <span class="n">final_score</span> <span class="o">&gt;=</span> <span class="mi">80</span><span class="p">:</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="s2">&quot;EXTREME&quot;</span>
+<span class="k">elif</span> <span class="n">final_score</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">:</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="s2">&quot;HIGH&quot;</span>
+<span class="k">elif</span> <span class="n">final_score</span> <span class="o">&gt;=</span> <span class="mi">40</span><span class="p">:</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="s2">&quot;MODERATE&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="s2">&quot;LOW&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-targets">
+<h2>Performance Targets<a class="headerlink" href="#performance-targets" title="Link to this heading"></a></h2>
+<p>The risk assessment module is optimized for performance:</p>
+<ul class="simple">
+<li><p><strong>Risk calculation</strong>: &lt; 10 seconds</p></li>
+<li><p><strong>Weather index calculation</strong>: &lt; 5 seconds</p></li>
+<li><p><strong>Batch processing</strong>: 100+ zones per minute</p></li>
+<li><p><strong>Memory usage</strong>: &lt; 100MB for typical operations</p></li>
+</ul>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>Comprehensive error handling for various scenarios:</p>
+<dl class="simple">
+<dt><strong>Data Validation</strong></dt><dd><ul class="simple">
+<li><p>Invalid coordinate ranges</p></li>
+<li><p>Missing required fields</p></li>
+<li><p>Out-of-range values</p></li>
+</ul>
+</dd>
+<dt><strong>Weather Data Issues</strong></dt><dd><ul class="simple">
+<li><p>Stale weather data (&gt;6 hours old)</p></li>
+<li><p>Incomplete weather records</p></li>
+<li><p>Extreme weather values</p></li>
+</ul>
+</dd>
+<dt><strong>Calculation Errors</strong></dt><dd><ul class="simple">
+<li><p>Division by zero protection</p></li>
+<li><p>Overflow/underflow handling</p></li>
+<li><p>NaN value detection</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example Error Handling:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.risk_assessment</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_fire_risk_score</span><span class="p">,</span> <span class="n">RiskAssessmentError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calculate_fire_risk_score</span><span class="p">(</span>
+        <span class="n">zone_data</span><span class="o">=</span><span class="n">invalid_zone</span><span class="p">,</span>  <span class="c1"># This will raise an error</span>
+        <span class="n">weather_data</span><span class="o">=</span><span class="n">weather_data</span><span class="p">,</span>
+        <span class="n">vegetation_data</span><span class="o">=</span><span class="n">vegetation_data</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="n">RiskAssessmentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Risk assessment failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Handle the error appropriately</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Handle validation errors</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>The module can be configured using environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Risk calculation parameters</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_RISK_TEMPERATURE_WEIGHT</span><span class="o">=</span><span class="m">0</span>.25
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_RISK_HUMIDITY_WEIGHT</span><span class="o">=</span><span class="m">0</span>.20
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_RISK_WIND_WEIGHT</span><span class="o">=</span><span class="m">0</span>.20
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_RISK_VEGETATION_WEIGHT</span><span class="o">=</span><span class="m">0</span>.25
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_RISK_PRECIPITATION_WEIGHT</span><span class="o">=</span><span class="m">0</span>.10
+
+<span class="c1"># Thresholds</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_EXTREME_RISK_THRESHOLD</span><span class="o">=</span><span class="m">80</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_HIGH_RISK_THRESHOLD</span><span class="o">=</span><span class="m">60</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_MODERATE_RISK_THRESHOLD</span><span class="o">=</span><span class="m">40</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-examples">
+<h2>Integration Examples<a class="headerlink" href="#integration-examples" title="Link to this heading"></a></h2>
+<section id="command-line-usage">
+<h3>Command Line Usage<a class="headerlink" href="#command-line-usage" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate risk for a specific zone</span>
+python<span class="w"> </span>scripts/calculate_risk.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;{&quot;bounds&quot;:{&quot;north&quot;:50,&quot;south&quot;:49,&quot;east&quot;:-120,&quot;west&quot;:-121},&quot;area_km2&quot;:100}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;{&quot;temperature&quot;:35,&quot;humidity&quot;:15,&quot;wind_speed&quot;:25,&quot;wind_direction&quot;:225,&quot;precipitation&quot;:0,&quot;timestamp&quot;:&quot;2024-01-01T12:00:00Z&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;{&quot;moisture_content&quot;:8,&quot;fuel_load&quot;:2.5}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="api-integration">
+<h3>API Integration<a class="headerlink" href="#api-integration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For Node.js API integration</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_risk_for_api</span><span class="p">(</span><span class="n">zone_data</span><span class="p">,</span> <span class="n">weather_data</span><span class="p">,</span> <span class="n">vegetation_data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper function for API calls.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">calculate_fire_risk_score</span><span class="p">(</span>
+            <span class="n">zone_data</span><span class="o">=</span><span class="n">zone_data</span><span class="p">,</span>
+            <span class="n">weather_data</span><span class="o">=</span><span class="n">weather_data</span><span class="p">,</span>
+            <span class="n">vegetation_data</span><span class="o">=</span><span class="n">vegetation_data</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">result</span>
+        <span class="p">}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="validation-and-testing">
+<h2>Validation and Testing<a class="headerlink" href="#validation-and-testing" title="Link to this heading"></a></h2>
+<p>The module includes comprehensive validation:</p>
+<dl class="simple">
+<dt><strong>Input Validation</strong></dt><dd><ul class="simple">
+<li><p>All inputs validated using Pydantic schemas</p></li>
+<li><p>Type checking and range validation</p></li>
+<li><p>Required field verification</p></li>
+</ul>
+</dd>
+<dt><strong>Output Validation</strong></dt><dd><ul class="simple">
+<li><p>Risk scores always between 0-100</p></li>
+<li><p>Risk levels match score ranges</p></li>
+<li><p>All required fields present in output</p></li>
+</ul>
+</dd>
+<dt><strong>Unit Tests</strong></dt><dd><ul class="simple">
+<li><p>Edge case handling</p></li>
+<li><p>Performance benchmarks</p></li>
+<li><p>Error condition testing</p></li>
+</ul>
+</dd>
+<dt><strong>Integration Tests</strong></dt><dd><ul class="simple">
+<li><p>End-to-end risk calculation</p></li>
+<li><p>Real-world data scenarios</p></li>
+<li><p>API integration testing</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hotspots.html" class="btn btn-neutral float-left" title="Hotspots Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="_autosummary/alviaorange.schemas.html" class="btn btn-neutral float-right" title="alviaorange.schemas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

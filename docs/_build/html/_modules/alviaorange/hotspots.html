@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>alviaorange.hotspots &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=449cabca" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/schemas.html">Schemas Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">alviaorange.hotspots</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for alviaorange.hotspots</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Hotspot detection and management module for wildfire monitoring.</span>
+
+<span class="sd">This module provides functions to detect and retrieve fire hotspots from various</span>
+<span class="sd">satellite sources including NASA FIRMS, VIIRS, and MODIS data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">uuid4</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">shapefile</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">shape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.ops</span><span class="w"> </span><span class="kn">import</span> <span class="n">unary_union</span><span class="p">,</span> <span class="n">transform</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyproj</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRS</span><span class="p">,</span> <span class="n">Transformer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Hotspot</span><span class="p">,</span> <span class="n">HotspotQueryResult</span><span class="p">,</span> <span class="n">HotspotSource</span><span class="p">,</span> <span class="n">HotspotMetadata</span><span class="p">,</span>
+    <span class="n">ZoneBounds</span><span class="p">,</span> <span class="n">Coordinates</span><span class="p">,</span> <span class="n">TimeRange</span><span class="p">,</span> <span class="n">APIResponse</span><span class="p">,</span> <span class="n">ErrorResponse</span>
+<span class="p">)</span>
+
+<span class="c1"># Configure logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Simplistic polygon definitions for Canada and the USA. These are rough</span>
+<span class="c1"># bounding boxes purely for demonstration purposes.</span>
+<span class="n">_CANADA_POLYGON</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">([(</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span> <span class="mi">83</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">141</span><span class="p">,</span> <span class="mi">83</span><span class="p">)])</span>
+<span class="n">_USA_POLYGON</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">([(</span><span class="o">-</span><span class="mi">125</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">66</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">66</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">125</span><span class="p">,</span> <span class="mi">49</span><span class="p">)])</span>
+
+<span class="c1"># Mapping of region name to polygon</span>
+<span class="n">REGION_SHAPES</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Polygon</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Canada&quot;</span><span class="p">:</span> <span class="n">_CANADA_POLYGON</span><span class="p">,</span>
+    <span class="s2">&quot;USA&quot;</span><span class="p">:</span> <span class="n">_USA_POLYGON</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># API Configuration</span>
+<span class="n">FIRMS_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://firms.modaps.eosdis.nasa.gov/api/area/csv&quot;</span>
+<span class="n">VIIRS_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://firms.modaps.eosdis.nasa.gov/api/area/csv&quot;</span>
+
+<span class="c1"># Default API key - should be set via environment variable in production</span>
+<span class="n">DEFAULT_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;your_nasa_firms_api_key_here&quot;</span>
+
+<div class="viewcode-block" id="HotspotDetectionError">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.HotspotDetectionError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HotspotDetectionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom exception for hotspot detection errors.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="APIConnectionError">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.APIConnectionError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">APIConnectionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom exception for API connection issues.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_shapefile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Polygon</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the union of all geometries in a shapefile in WGS84 coordinates.&quot;&quot;&quot;</span>
+
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">shapefile</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="n">geometries</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">__geo_interface__</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">shapes</span><span class="p">()]</span>
+    <span class="n">geom</span> <span class="o">=</span> <span class="n">unary_union</span><span class="p">(</span><span class="n">geometries</span><span class="p">)</span>
+
+    <span class="n">prj_file</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.prj&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prj_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">prj_txt</span> <span class="o">=</span> <span class="n">prj_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">prj_txt</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">src_crs</span> <span class="o">=</span> <span class="n">CRS</span><span class="o">.</span><span class="n">from_wkt</span><span class="p">(</span><span class="n">prj_txt</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">src_crs</span> <span class="o">=</span> <span class="n">CRS</span><span class="o">.</span><span class="n">from_user_input</span><span class="p">(</span><span class="n">prj_txt</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">src_crs</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">src_crs</span> <span class="ow">and</span> <span class="n">src_crs</span> <span class="o">!=</span> <span class="n">CRS</span><span class="o">.</span><span class="n">from_epsg</span><span class="p">(</span><span class="mi">4326</span><span class="p">):</span>
+                <span class="n">transformer</span> <span class="o">=</span> <span class="n">Transformer</span><span class="o">.</span><span class="n">from_crs</span><span class="p">(</span><span class="n">src_crs</span><span class="p">,</span> <span class="mi">4326</span><span class="p">,</span> <span class="n">always_xy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">geom</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">geom</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">geom</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fetch_by_region_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal helper returning hotspot list for a named region.&quot;&quot;&quot;</span>
+
+    <span class="n">sample_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Canada&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AB-001&quot;</span><span class="p">,</span> <span class="s2">&quot;BC-123&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;USA&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;CA-999&quot;</span><span class="p">,</span> <span class="s2">&quot;OR-456&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">sample_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
+
+<div class="viewcode-block" id="fetch_hotspots">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.fetch_hotspots">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_hotspots</span><span class="p">(</span>
+    <span class="n">region</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Canada&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return hotspot identifiers for a region or regions defined by a shapefile.&quot;&quot;&quot;</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;.shp&quot;</span><span class="p">:</span>
+        <span class="n">geom</span> <span class="o">=</span> <span class="n">_read_shapefile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">poly</span> <span class="ow">in</span> <span class="n">REGION_SHAPES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">poly</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">geom</span><span class="p">):</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fetch_by_region_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="k">return</span> <span class="n">_fetch_by_region_name</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">region</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="detect_hotspots_for_zone">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.detect_hotspots_for_zone">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detect_hotspots_for_zone</span><span class="p">(</span>
+    <span class="n">zone_bounds</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">time_range</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;VIIRS&quot;</span><span class="p">,</span> <span class="s2">&quot;MODIS&quot;</span><span class="p">,</span> <span class="s2">&quot;FIRMS&quot;</span><span class="p">],</span>
+    <span class="n">min_confidence</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Detect active fire hotspots within a geographical zone.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        zone_bounds: Dictionary with keys &#39;north&#39;, &#39;south&#39;, &#39;east&#39;, &#39;west&#39;</span>
+<span class="sd">        time_range: Dictionary with keys &#39;start_date&#39;, &#39;end_date&#39; (ISO format strings)</span>
+<span class="sd">        sources: List of data sources to query</span>
+<span class="sd">        min_confidence: Minimum confidence threshold (0-100)</span>
+<span class="sd">        api_key: NASA FIRMS API key</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary containing hotspots list, total count, and query time</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        HotspotDetectionError: When detection fails</span>
+<span class="sd">        APIConnectionError: When API connection fails</span>
+<span class="sd">        ValueError: When input parameters are invalid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Validate inputs</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">ZoneBounds</span><span class="p">(</span><span class="o">**</span><span class="n">zone_bounds</span><span class="p">)</span>
+        <span class="n">time_range_obj</span> <span class="o">=</span> <span class="n">TimeRange</span><span class="p">(</span>
+            <span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">time_range</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">)),</span>
+            <span class="n">end_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">time_range</span><span class="p">[</span><span class="s1">&#39;end_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">))</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Use provided API key or default</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">DEFAULT_API_KEY</span>
+        
+        <span class="n">all_hotspots</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">hotspots</span> <span class="o">=</span> <span class="n">_fetch_hotspots_from_source</span><span class="p">(</span>
+                    <span class="n">bounds</span><span class="p">,</span> <span class="n">time_range_obj</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">min_confidence</span><span class="p">,</span> <span class="n">key</span>
+                <span class="p">)</span>
+                <span class="n">all_hotspots</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">hotspots</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch from </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+        
+        <span class="c1"># Remove duplicates based on coordinates and timestamp</span>
+        <span class="n">unique_hotspots</span> <span class="o">=</span> <span class="n">_remove_duplicate_hotspots</span><span class="p">(</span><span class="n">all_hotspots</span><span class="p">)</span>
+        
+        <span class="c1"># Filter by confidence</span>
+        <span class="n">filtered_hotspots</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">unique_hotspots</span> 
+            <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">confidence</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;=</span> <span class="n">min_confidence</span>
+        <span class="p">]</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="n">HotspotQueryResult</span><span class="p">(</span>
+            <span class="n">hotspots</span><span class="o">=</span><span class="n">filtered_hotspots</span><span class="p">,</span>
+            <span class="n">total_count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_hotspots</span><span class="p">),</span>
+            <span class="n">query_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hotspot detection failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HotspotDetectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to detect hotspots: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_active_hotspots">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.get_active_hotspots">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_active_hotspots</span><span class="p">(</span>
+    <span class="n">zone_bounds</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">hours_back</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="n">min_confidence</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get currently active hotspots (within specified hours).</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        zone_bounds: Dictionary with keys &#39;north&#39;, &#39;south&#39;, &#39;east&#39;, &#39;west&#39;</span>
+<span class="sd">        hours_back: Number of hours to look back for active hotspots</span>
+<span class="sd">        min_confidence: Minimum confidence threshold</span>
+<span class="sd">        api_key: NASA FIRMS API key</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary containing active hotspots</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        HotspotDetectionError: When detection fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">hours_back</span><span class="p">)</span>
+        
+        <span class="n">time_range</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;start_date&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;end_date&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="n">detect_hotspots_for_zone</span><span class="p">(</span>
+            <span class="n">zone_bounds</span><span class="o">=</span><span class="n">zone_bounds</span><span class="p">,</span>
+            <span class="n">time_range</span><span class="o">=</span><span class="n">time_range</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;VIIRS&quot;</span><span class="p">,</span> <span class="s2">&quot;MODIS&quot;</span><span class="p">],</span>  <span class="c1"># Use most recent data sources</span>
+            <span class="n">min_confidence</span><span class="o">=</span><span class="n">min_confidence</span><span class="p">,</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span>
+        <span class="p">)</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active hotspot retrieval failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HotspotDetectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get active hotspots: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_hotspots_near_point">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots.get_hotspots_near_point">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hotspots_near_point</span><span class="p">(</span>
+    <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">lng</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">radius_km</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">hours_back</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find hotspots within radius of specific coordinates.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        lat: Latitude of center point</span>
+<span class="sd">        lng: Longitude of center point</span>
+<span class="sd">        radius_km: Search radius in kilometers</span>
+<span class="sd">        limit: Maximum number of hotspots to return</span>
+<span class="sd">        hours_back: Number of hours to look back</span>
+<span class="sd">        api_key: NASA FIRMS API key</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary containing nearby hotspots</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        HotspotDetectionError: When detection fails</span>
+<span class="sd">        ValueError: When coordinates are invalid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Validate coordinates</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">Coordinates</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="n">lng</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate bounding box (rough approximation)</span>
+        <span class="c1"># 1 degree ≈ 111 km at equator</span>
+        <span class="n">degree_offset</span> <span class="o">=</span> <span class="n">radius_km</span> <span class="o">/</span> <span class="mf">111.0</span>
+        
+        <span class="n">zone_bounds</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;north&#39;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">degree_offset</span><span class="p">),</span>
+            <span class="s1">&#39;south&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="n">lat</span> <span class="o">-</span> <span class="n">degree_offset</span><span class="p">),</span>
+            <span class="s1">&#39;east&#39;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="n">lng</span> <span class="o">+</span> <span class="n">degree_offset</span><span class="p">),</span>
+            <span class="s1">&#39;west&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="n">lng</span> <span class="o">-</span> <span class="n">degree_offset</span><span class="p">)</span>
+        <span class="p">}</span>
+        
+        <span class="c1"># Get hotspots in the bounding box</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">get_active_hotspots</span><span class="p">(</span>
+            <span class="n">zone_bounds</span><span class="o">=</span><span class="n">zone_bounds</span><span class="p">,</span>
+            <span class="n">hours_back</span><span class="o">=</span><span class="n">hours_back</span><span class="p">,</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Filter by actual distance and apply limit</span>
+        <span class="k">if</span> <span class="s1">&#39;hotspots&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">nearby_hotspots</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">hotspot_data</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;hotspots&#39;</span><span class="p">]:</span>
+                <span class="n">hotspot</span> <span class="o">=</span> <span class="n">Hotspot</span><span class="p">(</span><span class="o">**</span><span class="n">hotspot_data</span><span class="p">)</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">_calculate_distance</span><span class="p">(</span>
+                    <span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="n">hotspot</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">hotspot</span><span class="o">.</span><span class="n">longitude</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="n">radius_km</span><span class="p">:</span>
+                    <span class="n">nearby_hotspots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hotspot_data</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nearby_hotspots</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">limit</span><span class="p">:</span>
+                        <span class="k">break</span>
+            
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;hotspots&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearby_hotspots</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;total_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nearby_hotspots</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">result</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nearby hotspot search failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HotspotDetectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find nearby hotspots: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_fetch_hotspots_from_source">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots._fetch_hotspots_from_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fetch_hotspots_from_source</span><span class="p">(</span>
+    <span class="n">bounds</span><span class="p">:</span> <span class="n">ZoneBounds</span><span class="p">,</span>
+    <span class="n">time_range</span><span class="p">:</span> <span class="n">TimeRange</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">min_confidence</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Hotspot</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch hotspots from a specific data source.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        bounds: Zone boundaries</span>
+<span class="sd">        time_range: Time range for query</span>
+<span class="sd">        source: Data source name</span>
+<span class="sd">        min_confidence: Minimum confidence threshold</span>
+<span class="sd">        api_key: API key for authentication</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of Hotspot objects</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        APIConnectionError: When API request fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># For now, return mock data since we don&#39;t have real API keys</span>
+        <span class="c1"># In production, this would make actual API calls to NASA FIRMS</span>
+        
+        <span class="n">mock_hotspots</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Hotspot</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">uuid4</span><span class="p">(),</span>
+                <span class="n">latitude</span><span class="o">=</span><span class="n">bounds</span><span class="o">.</span><span class="n">south</span> <span class="o">+</span> <span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">north</span> <span class="o">-</span> <span class="n">bounds</span><span class="o">.</span><span class="n">south</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">longitude</span><span class="o">=</span><span class="n">bounds</span><span class="o">.</span><span class="n">west</span> <span class="o">+</span> <span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">east</span> <span class="o">-</span> <span class="n">bounds</span><span class="o">.</span><span class="n">west</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span><span class="p">,</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="mi">85</span><span class="p">,</span>
+                <span class="n">frp</span><span class="o">=</span><span class="mf">12.5</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="n">HotspotSource</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="n">HotspotMetadata</span><span class="p">(</span>
+                    <span class="n">satellite</span><span class="o">=</span><span class="s2">&quot;NOAA-20&quot;</span> <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;VIIRS&quot;</span> <span class="k">else</span> <span class="s2">&quot;Terra&quot;</span><span class="p">,</span>
+                    <span class="n">scan_angle</span><span class="o">=</span><span class="mf">15.2</span><span class="p">,</span>
+                    <span class="n">pixel_size</span><span class="o">=</span><span class="mi">375</span> <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;VIIRS&quot;</span> <span class="k">else</span> <span class="mi">1000</span><span class="p">,</span>
+                    <span class="n">brightness_temp</span><span class="o">=</span><span class="mf">320.5</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">Hotspot</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">uuid4</span><span class="p">(),</span>
+                <span class="n">latitude</span><span class="o">=</span><span class="n">bounds</span><span class="o">.</span><span class="n">south</span> <span class="o">+</span> <span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">north</span> <span class="o">-</span> <span class="n">bounds</span><span class="o">.</span><span class="n">south</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">,</span>
+                <span class="n">longitude</span><span class="o">=</span><span class="n">bounds</span><span class="o">.</span><span class="n">west</span> <span class="o">+</span> <span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">east</span> <span class="o">-</span> <span class="n">bounds</span><span class="o">.</span><span class="n">west</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="mi">92</span><span class="p">,</span>
+                <span class="n">frp</span><span class="o">=</span><span class="mf">25.8</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="n">HotspotSource</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="n">HotspotMetadata</span><span class="p">(</span>
+                    <span class="n">satellite</span><span class="o">=</span><span class="s2">&quot;NOAA-20&quot;</span> <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;VIIRS&quot;</span> <span class="k">else</span> <span class="s2">&quot;Aqua&quot;</span><span class="p">,</span>
+                    <span class="n">scan_angle</span><span class="o">=</span><span class="mf">8.7</span><span class="p">,</span>
+                    <span class="n">pixel_size</span><span class="o">=</span><span class="mi">375</span> <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;VIIRS&quot;</span> <span class="k">else</span> <span class="mi">1000</span><span class="p">,</span>
+                    <span class="n">brightness_temp</span><span class="o">=</span><span class="mf">335.2</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">return</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">mock_hotspots</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;=</span> <span class="n">min_confidence</span><span class="p">]</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch from </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">APIConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API request failed for </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_remove_duplicate_hotspots">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots._remove_duplicate_hotspots">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_remove_duplicate_hotspots</span><span class="p">(</span><span class="n">hotspots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Hotspot</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Hotspot</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove duplicate hotspots based on proximity and time.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        hotspots: List of hotspot objects</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of unique hotspots</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hotspots</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    
+    <span class="n">unique_hotspots</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">hotspot</span> <span class="ow">in</span> <span class="n">hotspots</span><span class="p">:</span>
+        <span class="n">is_duplicate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">existing</span> <span class="ow">in</span> <span class="n">unique_hotspots</span><span class="p">:</span>
+            <span class="c1"># Consider duplicates if within 1km and 1 hour</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">_calculate_distance</span><span class="p">(</span>
+                <span class="n">hotspot</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">hotspot</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                <span class="n">existing</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">existing</span><span class="o">.</span><span class="n">longitude</span>
+            <span class="p">)</span>
+            <span class="n">time_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">hotspot</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">-</span> <span class="n">existing</span><span class="o">.</span><span class="n">timestamp</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+            
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">1.0</span> <span class="ow">and</span> <span class="n">time_diff</span> <span class="o">&lt;</span> <span class="mi">3600</span><span class="p">:</span>  <span class="c1"># 1km, 1 hour</span>
+                <span class="n">is_duplicate</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_duplicate</span><span class="p">:</span>
+            <span class="n">unique_hotspots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hotspot</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">unique_hotspots</span></div>
+
+
+<div class="viewcode-block" id="_calculate_distance">
+<a class="viewcode-back" href="../../api/hotspots.html#alviaorange.hotspots._calculate_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_distance</span><span class="p">(</span><span class="n">lat1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lon1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lat2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lon2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the great circle distance between two points in kilometers.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        lat1, lon1: First point coordinates</span>
+<span class="sd">        lat2, lon2: Second point coordinates</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Distance in kilometers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">radians</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">sqrt</span>
+    
+    <span class="c1"># Convert decimal degrees to radians</span>
+    <span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">,</span> <span class="n">lon2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="p">[</span><span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">,</span> <span class="n">lon2</span><span class="p">])</span>
+    
+    <span class="c1"># Haversine formula</span>
+    <span class="n">dlat</span> <span class="o">=</span> <span class="n">lat2</span> <span class="o">-</span> <span class="n">lat1</span>
+    <span class="n">dlon</span> <span class="o">=</span> <span class="n">lon2</span> <span class="o">-</span> <span class="n">lon1</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlat</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlon</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    
+    <span class="c1"># Radius of earth in kilometers</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="mi">6371</span>
+    
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">r</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

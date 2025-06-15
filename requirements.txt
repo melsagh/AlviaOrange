@@ -7,9 +7,22 @@ shapely
 pyshp
 pyproj
 plotly
+pydantic
 
 # Weather station functionality dependencies  
 pandas
 geopandas
 geopy
 numpy
+
+# Geospatial
+rasterio
+
+# For notebooks and visualization
+jupyter
+matplotlib
+seaborn
+
+# For testing
+pytest
+pytest-cov

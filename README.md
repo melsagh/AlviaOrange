@@ -142,6 +142,46 @@ Place new notebooks in the `notebooks/` directory and keep algorithm modules ins
 `alviaorange/`. Ensure that any new functionality includes corresponding tests in
 `tests/`. Follow PEP 8 style and include type hints where practical.
 
+## 📚 Documentation
+
+### Online Documentation
+
+Visit our comprehensive documentation site: **[AlviaOrange Documentation](https://your-username.github.io/AlviaOrange/)**
+
+The documentation includes:
+- 🚀 **Quick Start Guide** - Get up and running in minutes
+- 📖 **Installation Guide** - Detailed setup instructions
+- 🔧 **API Reference** - Complete function documentation
+- 📓 **Examples** - Jupyter notebooks and code samples
+- 🤝 **Contributing Guide** - How to contribute to the project
+
+### Building Documentation Locally
+
+To build and view the documentation locally:
+
+```bash
+# Install documentation dependencies
+pip install -r requirements-dev.txt
+
+# Build the documentation
+cd docs
+sphinx-build -b html . _build/html
+
+# Serve locally
+python -m http.server 8000 -d _build/html
+# Open http://localhost:8000 in your browser
+```
+
+### Documentation Features
+
+- **Auto-generated API docs** from docstrings using Sphinx
+- **Professional styling** with Read the Docs theme and custom Alvia branding
+- **Interactive examples** with copy-paste code blocks
+- **Jupyter notebook integration** for data science workflows
+- **GitHub Pages deployment** for easy access
+- **Search functionality** across all documentation
+- **Mobile-responsive design** for any device
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

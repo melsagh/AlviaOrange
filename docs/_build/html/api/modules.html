@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=449cabca" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Schemas Module" href="schemas.html" />
+    <link rel="prev" title="Installation Guide" href="../installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-modules">Core Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html">Schemas Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-index">Module Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/alviaorange.schemas.html">alviaorange.schemas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/alviaorange.hotspots.html">alviaorange.hotspots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/alviaorange.risk_assessment.html">alviaorange.risk_assessment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-reference">Quick Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-notes">Performance Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-safety">Type Safety</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="schemas.html">Schemas Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hotspots.html">Hotspots Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/your-github-username/AlviaOrange/blob/main/docs/api/modules.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>This section contains the complete API reference for AlviaOrange, automatically generated from the source code docstrings.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>AlviaOrange is organized into several key modules:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="schemas.html"><span class="doc">Schemas Module</span></a> - Data validation and type definitions using Pydantic</p></li>
+<li><p><a class="reference internal" href="hotspots.html"><span class="doc">Hotspots Module</span></a> - Wildfire hotspot detection and management</p></li>
+<li><p><a class="reference internal" href="risk_assessment.html"><span class="doc">Risk Assessment Module</span></a> - Fire risk calculation and analysis</p></li>
+</ul>
+<p>All functions include comprehensive type hints and validation to ensure data integrity and provide excellent developer experience.</p>
+</section>
+<section id="core-modules">
+<h2>Core Modules<a class="headerlink" href="#core-modules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="schemas.html">Schemas Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.HotspotSource"><code class="docutils literal notranslate"><span class="pre">HotspotSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.RiskLevel"><code class="docutils literal notranslate"><span class="pre">RiskLevel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.DrynessLevel"><code class="docutils literal notranslate"><span class="pre">DrynessLevel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.FuelModel"><code class="docutils literal notranslate"><span class="pre">FuelModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.AlertType"><code class="docutils literal notranslate"><span class="pre">AlertType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.AlertSeverity"><code class="docutils literal notranslate"><span class="pre">AlertSeverity</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.ZoneBounds"><code class="docutils literal notranslate"><span class="pre">ZoneBounds</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.Coordinates"><code class="docutils literal notranslate"><span class="pre">Coordinates</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.TimeRange"><code class="docutils literal notranslate"><span class="pre">TimeRange</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.HotspotMetadata"><code class="docutils literal notranslate"><span class="pre">HotspotMetadata</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.Hotspot"><code class="docutils literal notranslate"><span class="pre">Hotspot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.HotspotQueryResult"><code class="docutils literal notranslate"><span class="pre">HotspotQueryResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.FireWeatherIndex"><code class="docutils literal notranslate"><span class="pre">FireWeatherIndex</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.WeatherData"><code class="docutils literal notranslate"><span class="pre">WeatherData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.WeatherForecast"><code class="docutils literal notranslate"><span class="pre">WeatherForecast</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.ZoneData"><code class="docutils literal notranslate"><span class="pre">ZoneData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.VegetationData"><code class="docutils literal notranslate"><span class="pre">VegetationData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.TopographyData"><code class="docutils literal notranslate"><span class="pre">TopographyData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.RiskFactors"><code class="docutils literal notranslate"><span class="pre">RiskFactors</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.RiskAssessment"><code class="docutils literal notranslate"><span class="pre">RiskAssessment</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.FireSpreadPolygon"><code class="docutils literal notranslate"><span class="pre">FireSpreadPolygon</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.FireSpreadPrediction"><code class="docutils literal notranslate"><span class="pre">FireSpreadPrediction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.FuelAnalysis"><code class="docutils literal notranslate"><span class="pre">FuelAnalysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.AlertData"><code class="docutils literal notranslate"><span class="pre">AlertData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.Alert"><code class="docutils literal notranslate"><span class="pre">Alert</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.APIResponse"><code class="docutils literal notranslate"><span class="pre">APIResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#alviaorange.schemas.ErrorResponse"><code class="docutils literal notranslate"><span class="pre">ErrorResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#core-data-models">Core Data Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#usage-examples">Usage Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#validation-rules">Validation Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#type-safety">Type Safety</a></li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#performance">Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hotspots.html">Hotspots Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.HotspotDetectionError"><code class="docutils literal notranslate"><span class="pre">HotspotDetectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.APIConnectionError"><code class="docutils literal notranslate"><span class="pre">APIConnectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.fetch_hotspots"><code class="docutils literal notranslate"><span class="pre">fetch_hotspots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.detect_hotspots_for_zone"><code class="docutils literal notranslate"><span class="pre">detect_hotspots_for_zone()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.get_active_hotspots"><code class="docutils literal notranslate"><span class="pre">get_active_hotspots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#alviaorange.hotspots.get_hotspots_near_point"><code class="docutils literal notranslate"><span class="pre">get_hotspots_near_point()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#core-functions">Core Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#utility-functions">Utility Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#exception-classes">Exception Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#data-sources">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotspots.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risk_assessment.html">Risk Assessment Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#alviaorange.risk_assessment.RiskAssessmentError"><code class="docutils literal notranslate"><span class="pre">RiskAssessmentError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#alviaorange.risk_assessment.calculate_fire_risk_score"><code class="docutils literal notranslate"><span class="pre">calculate_fire_risk_score()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#core-functions">Core Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#risk-assessment-components">Risk Assessment Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#risk-calculation-algorithm">Risk Calculation Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#performance-targets">Performance Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#integration-examples">Integration Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="risk_assessment.html#validation-and-testing">Validation and Testing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-index">
+<h2>Module Index<a class="headerlink" href="#module-index" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="schemas.html#module-alviaorange.schemas" title="alviaorange.schemas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hotspots.html#module-alviaorange.hotspots" title="alviaorange.hotspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.hotspots</span></code></a></p></td>
+<td><p>Hotspot detection and management module for wildfire monitoring.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="risk_assessment.html#module-alviaorange.risk_assessment" title="alviaorange.risk_assessment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.risk_assessment</span></code></a></p></td>
+<td><p>Fire risk assessment module for calculating comprehensive fire risk scores.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="quick-reference">
+<h2>Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading"></a></h2>
+<p><strong>Hotspot Detection Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="hotspots.html#id0" title="alviaorange.hotspots.detect_hotspots_for_zone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.hotspots.detect_hotspots_for_zone</span></code></a>(...)</p></td>
+<td><p>Detect active fire hotspots within a geographical zone.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hotspots.html#id1" title="alviaorange.hotspots.get_active_hotspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.hotspots.get_active_hotspots</span></code></a>(...)</p></td>
+<td><p>Get currently active hotspots (within specified hours).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="hotspots.html#id2" title="alviaorange.hotspots.get_hotspots_near_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.hotspots.get_hotspots_near_point</span></code></a>(...)</p></td>
+<td><p>Find hotspots within radius of specific coordinates.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Risk Assessment Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="risk_assessment.html#id0" title="alviaorange.risk_assessment.calculate_fire_risk_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.risk_assessment.calculate_fire_risk_score</span></code></a>(...)</p></td>
+<td><p>Calculate comprehensive fire risk score using multiple factors.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Core Data Models:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="schemas.html#id11" title="alviaorange.schemas.Hotspot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas.Hotspot</span></code></a>(**data)</p></td>
+<td><p>Represents a single wildfire hotspot detection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="schemas.html#id51" title="alviaorange.schemas.RiskAssessment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas.RiskAssessment</span></code></a>(**data)</p></td>
+<td><p>Fire risk assessment result.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="schemas.html#id32" title="alviaorange.schemas.WeatherData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas.WeatherData</span></code></a>(**data)</p></td>
+<td><p>Current weather data relevant to fire risk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="schemas.html#id71" title="alviaorange.schemas.VegetationData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas.VegetationData</span></code></a>(**data)</p></td>
+<td><p>Vegetation data for risk assessment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="schemas.html#id0" title="alviaorange.schemas.ZoneBounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alviaorange.schemas.ZoneBounds</span></code></a>(**data)</p></td>
+<td><p>Geographical bounds for a zone.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="performance-notes">
+<h2>Performance Notes<a class="headerlink" href="#performance-notes" title="Link to this heading"></a></h2>
+<p>All functions are designed to meet specific performance targets:</p>
+<ul class="simple">
+<li><p><strong>Hotspot detection</strong>: &lt; 30 seconds for 100km² area</p></li>
+<li><p><strong>Risk assessment</strong>: &lt; 10 seconds</p></li>
+<li><p><strong>Data validation</strong>: &lt; 1 second for typical payloads</p></li>
+</ul>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>All functions use consistent error handling patterns:</p>
+<ul class="simple">
+<li><p><strong>Input validation</strong>: Pydantic models validate all inputs</p></li>
+<li><p><strong>Custom exceptions</strong>: Specific exception types for different error conditions</p></li>
+<li><p><strong>Detailed error messages</strong>: Clear descriptions of what went wrong</p></li>
+<li><p><strong>Graceful degradation</strong>: Functions continue working with partial data when possible</p></li>
+</ul>
+</section>
+<section id="type-safety">
+<h2>Type Safety<a class="headerlink" href="#type-safety" title="Link to this heading"></a></h2>
+<p>AlviaOrange is fully typed using Python type hints:</p>
+<ul class="simple">
+<li><p>All function parameters and return values are typed</p></li>
+<li><p>Pydantic models provide runtime type validation</p></li>
+<li><p>IDE support for autocompletion and error detection</p></li>
+<li><p>MyPy compatibility for static type checking</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../installation.html" class="btn btn-neutral float-left" title="Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="schemas.html" class="btn btn-neutral float-right" title="Schemas Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

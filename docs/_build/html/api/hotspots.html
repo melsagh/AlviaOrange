@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotspots Module &mdash; AlviaOrange 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=449cabca" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=30646c52"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Risk Assessment Module" href="risk_assessment.html" />
+    <link rel="prev" title="Schemas Module" href="schemas.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlviaOrange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schemas.html">Schemas Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hotspots Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.HotspotDetectionError"><code class="docutils literal notranslate"><span class="pre">HotspotDetectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.APIConnectionError"><code class="docutils literal notranslate"><span class="pre">APIConnectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.fetch_hotspots"><code class="docutils literal notranslate"><span class="pre">fetch_hotspots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.detect_hotspots_for_zone"><code class="docutils literal notranslate"><span class="pre">detect_hotspots_for_zone()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.get_active_hotspots"><code class="docutils literal notranslate"><span class="pre">get_active_hotspots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alviaorange.hotspots.get_hotspots_near_point"><code class="docutils literal notranslate"><span class="pre">get_hotspots_near_point()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-functions">Core Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hotspot-detection">Hotspot Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">detect_hotspots_for_zone()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#active-hotspots">Active Hotspots</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">get_active_hotspots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#proximity-search">Proximity Search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">get_hotspots_near_point()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#internal-helper-functions">Internal Helper Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#alviaorange.hotspots._fetch_hotspots_from_source"><code class="docutils literal notranslate"><span class="pre">_fetch_hotspots_from_source()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alviaorange.hotspots._remove_duplicate_hotspots"><code class="docutils literal notranslate"><span class="pre">_remove_duplicate_hotspots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alviaorange.hotspots._calculate_distance"><code class="docutils literal notranslate"><span class="pre">_calculate_distance()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exception-classes">Exception Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">HotspotDetectionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">APIConnectionError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-sources">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="risk_assessment.html">Risk Assessment Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlviaOrange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Hotspots Module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/your-github-username/AlviaOrange/blob/main/docs/api/hotspots.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-alviaorange.hotspots">
+<span id="hotspots-module"></span><h1>Hotspots Module<a class="headerlink" href="#module-alviaorange.hotspots" title="Link to this heading"></a></h1>
+<p>Hotspot detection and management module for wildfire monitoring.</p>
+<p>This module provides functions to detect and retrieve fire hotspots from various
+satellite sources including NASA FIRMS, VIIRS, and MODIS data.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="alviaorange.hotspots.HotspotDetectionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">HotspotDetectionError</span></span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#HotspotDetectionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.HotspotDetectionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Custom exception for hotspot detection errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="alviaorange.hotspots.APIConnectionError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">APIConnectionError</span></span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#APIConnectionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.APIConnectionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Custom exception for API connection issues.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots.fetch_hotspots">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">fetch_hotspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Canada'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#fetch_hotspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.fetch_hotspots" title="Link to this definition"></a></dt>
+<dd><p>Return hotspot identifiers for a region or regions defined by a shapefile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots.detect_hotspots_for_zone">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">detect_hotspots_for_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['VIIRS',</span> <span class="pre">'MODIS',</span> <span class="pre">'FIRMS']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#detect_hotspots_for_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.detect_hotspots_for_zone" title="Link to this definition"></a></dt>
+<dd><p>Detect active fire hotspots within a geographical zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_bounds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Dictionary with keys ‘north’, ‘south’, ‘east’, ‘west’</p></li>
+<li><p><strong>time_range</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Dictionary with keys ‘start_date’, ‘end_date’ (ISO format strings)</p></li>
+<li><p><strong>sources</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of data sources to query</p></li>
+<li><p><strong>min_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum confidence threshold (0-100)</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing hotspots list, total count, and query time</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p></li>
+<li><p><a class="reference internal" href="#id4" title="alviaorange.hotspots.APIConnectionError"><strong>APIConnectionError</strong></a> – When API connection fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When input parameters are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots.get_active_hotspots">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">get_active_hotspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours_back</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#get_active_hotspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.get_active_hotspots" title="Link to this definition"></a></dt>
+<dd><p>Get currently active hotspots (within specified hours).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_bounds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Dictionary with keys ‘north’, ‘south’, ‘east’, ‘west’</p></li>
+<li><p><strong>hours_back</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of hours to look back for active hotspots</p></li>
+<li><p><strong>min_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum confidence threshold</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing active hotspots</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots.get_hotspots_near_point">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">get_hotspots_near_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_km</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours_back</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#get_hotspots_near_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots.get_hotspots_near_point" title="Link to this definition"></a></dt>
+<dd><p>Find hotspots within radius of specific coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Latitude of center point</p></li>
+<li><p><strong>lng</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Longitude of center point</p></li>
+<li><p><strong>radius_km</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Search radius in kilometers</p></li>
+<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum number of hotspots to return</p></li>
+<li><p><strong>hours_back</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of hours to look back</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing nearby hotspots</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When coordinates are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The hotspots module provides comprehensive functionality for detecting and managing wildfire hotspots from various satellite data sources.</p>
+<section id="core-functions">
+<h2>Core Functions<a class="headerlink" href="#core-functions" title="Link to this heading"></a></h2>
+<section id="hotspot-detection">
+<h3>Hotspot Detection<a class="headerlink" href="#hotspot-detection" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">detect_hotspots_for_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['VIIRS',</span> <span class="pre">'MODIS',</span> <span class="pre">'FIRMS']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#detect_hotspots_for_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Detect active fire hotspots within a geographical zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_bounds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Dictionary with keys ‘north’, ‘south’, ‘east’, ‘west’</p></li>
+<li><p><strong>time_range</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Dictionary with keys ‘start_date’, ‘end_date’ (ISO format strings)</p></li>
+<li><p><strong>sources</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of data sources to query</p></li>
+<li><p><strong>min_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum confidence threshold (0-100)</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing hotspots list, total count, and query time</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p></li>
+<li><p><a class="reference internal" href="#id4" title="alviaorange.hotspots.APIConnectionError"><strong>APIConnectionError</strong></a> – When API connection fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When input parameters are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>This is the primary function for detecting hotspots within a geographical zone. It integrates with multiple satellite data sources and provides comprehensive filtering and validation.</p>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.hotspots</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_hotspots_for_zone</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="c1"># Define zone bounds (British Columbia example)</span>
+<span class="n">zone_bounds</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;north&#39;</span><span class="p">:</span> <span class="mf">50.0</span><span class="p">,</span>
+    <span class="s1">&#39;south&#39;</span><span class="p">:</span> <span class="mf">49.0</span><span class="p">,</span>
+    <span class="s1">&#39;east&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">120.0</span><span class="p">,</span>
+    <span class="s1">&#39;west&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">121.0</span>
+<span class="p">}</span>
+
+<span class="c1"># Define time range for last 24 hours</span>
+<span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+<span class="n">time_range</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;start_date&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;end_date&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
+<span class="p">}</span>
+
+<span class="c1"># Detect hotspots</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">detect_hotspots_for_zone</span><span class="p">(</span>
+    <span class="n">zone_bounds</span><span class="o">=</span><span class="n">zone_bounds</span><span class="p">,</span>
+    <span class="n">time_range</span><span class="o">=</span><span class="n">time_range</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;VIIRS&quot;</span><span class="p">,</span> <span class="s2">&quot;MODIS&quot;</span><span class="p">],</span>
+    <span class="n">min_confidence</span><span class="o">=</span><span class="mi">70</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;total_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> hotspots&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">hotspot</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;hotspots&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">hotspot</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hotspot</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">hotspot</span><span class="p">[</span><span class="s1">&#39;confidence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="active-hotspots">
+<h3>Active Hotspots<a class="headerlink" href="#active-hotspots" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">get_active_hotspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours_back</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#get_active_hotspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Get currently active hotspots (within specified hours).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone_bounds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Dictionary with keys ‘north’, ‘south’, ‘east’, ‘west’</p></li>
+<li><p><strong>hours_back</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of hours to look back for active hotspots</p></li>
+<li><p><strong>min_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum confidence threshold</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing active hotspots</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Retrieves currently active hotspots within a specified time window.</p>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.hotspots</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_active_hotspots</span>
+
+<span class="c1"># Get hotspots from last 48 hours</span>
+<span class="n">active_hotspots</span> <span class="o">=</span> <span class="n">get_active_hotspots</span><span class="p">(</span>
+    <span class="n">zone_bounds</span><span class="o">=</span><span class="n">zone_bounds</span><span class="p">,</span>
+    <span class="n">hours_back</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span>
+    <span class="n">min_confidence</span><span class="o">=</span><span class="mi">80</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active hotspots: </span><span class="si">{</span><span class="n">active_hotspots</span><span class="p">[</span><span class="s1">&#39;total_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="proximity-search">
+<h3>Proximity Search<a class="headerlink" href="#proximity-search" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">get_hotspots_near_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_km</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours_back</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#get_hotspots_near_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Find hotspots within radius of specific coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Latitude of center point</p></li>
+<li><p><strong>lng</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Longitude of center point</p></li>
+<li><p><strong>radius_km</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Search radius in kilometers</p></li>
+<li><p><strong>limit</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum number of hotspots to return</p></li>
+<li><p><strong>hours_back</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of hours to look back</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – NASA FIRMS API key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing nearby hotspots</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id3" title="alviaorange.hotspots.HotspotDetectionError"><strong>HotspotDetectionError</strong></a> – When detection fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When coordinates are invalid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Finds hotspots within a specified radius of a point of interest.</p>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.hotspots</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_hotspots_near_point</span>
+
+<span class="c1"># Find hotspots within 50km of a specific location</span>
+<span class="n">nearby_hotspots</span> <span class="o">=</span> <span class="n">get_hotspots_near_point</span><span class="p">(</span>
+    <span class="n">lat</span><span class="o">=</span><span class="mf">49.5</span><span class="p">,</span>
+    <span class="n">lng</span><span class="o">=-</span><span class="mf">120.5</span><span class="p">,</span>
+    <span class="n">radius_km</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nearby hotspots: </span><span class="si">{</span><span class="n">nearby_hotspots</span><span class="p">[</span><span class="s1">&#39;total_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading"></a></h2>
+<section id="internal-helper-functions">
+<h3>Internal Helper Functions<a class="headerlink" href="#internal-helper-functions" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots._fetch_hotspots_from_source">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">_fetch_hotspots_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_confidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#_fetch_hotspots_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots._fetch_hotspots_from_source" title="Link to this definition"></a></dt>
+<dd><p>Fetch hotspots from a specific data source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bounds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="schemas.html#id0" title="alviaorange.schemas.ZoneBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">ZoneBounds</span></code></a></span>) – Zone boundaries</p></li>
+<li><p><strong>time_range</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="schemas.html#id82" title="alviaorange.schemas.TimeRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeRange</span></code></a></span>) – Time range for query</p></li>
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Data source name</p></li>
+<li><p><strong>min_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Minimum confidence threshold</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – API key for authentication</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="schemas.html#id11" title="alviaorange.schemas.Hotspot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hotspot</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of Hotspot objects</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#id4" title="alviaorange.hotspots.APIConnectionError"><strong>APIConnectionError</strong></a> – When API request fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots._remove_duplicate_hotspots">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">_remove_duplicate_hotspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hotspots</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#_remove_duplicate_hotspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots._remove_duplicate_hotspots" title="Link to this definition"></a></dt>
+<dd><p>Remove duplicate hotspots based on proximity and time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hotspots</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="schemas.html#id11" title="alviaorange.schemas.Hotspot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hotspot</span></code></a>]</span>) – List of hotspot objects</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="schemas.html#id11" title="alviaorange.schemas.Hotspot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hotspot</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of unique hotspots</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alviaorange.hotspots._calculate_distance">
+<span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">_calculate_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#_calculate_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alviaorange.hotspots._calculate_distance" title="Link to this definition"></a></dt>
+<dd><p>Calculate the great circle distance between two points in kilometers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat1</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – First point coordinates</p></li>
+<li><p><strong>lon1</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – First point coordinates</p></li>
+<li><p><strong>lat2</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Second point coordinates</p></li>
+<li><p><strong>lon2</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Second point coordinates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Distance in kilometers</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="exception-classes">
+<h2>Exception Classes<a class="headerlink" href="#exception-classes" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">HotspotDetectionError</span></span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#HotspotDetectionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Custom exception for hotspot detection errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">alviaorange.hotspots.</span></span><span class="sig-name descname"><span class="pre">APIConnectionError</span></span><a class="reference internal" href="../_modules/alviaorange/hotspots.html#APIConnectionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Custom exception for API connection issues.</p>
+</dd></dl>
+
+</section>
+<section id="data-sources">
+<h2>Data Sources<a class="headerlink" href="#data-sources" title="Link to this heading"></a></h2>
+<p>The hotspots module integrates with several satellite data sources:</p>
+<dl class="simple">
+<dt><strong>NASA FIRMS (Fire Information for Resource Management System)</strong></dt><dd><ul class="simple">
+<li><p>Real-time and near real-time fire detection</p></li>
+<li><p>Global coverage</p></li>
+<li><p>Multiple satellite platforms</p></li>
+</ul>
+</dd>
+<dt><strong>VIIRS (Visible Infrared Imaging Radiometer Suite)</strong></dt><dd><ul class="simple">
+<li><p>High-resolution fire detection</p></li>
+<li><p>375m pixel resolution</p></li>
+<li><p>NOAA-20 and Suomi NPP satellites</p></li>
+</ul>
+</dd>
+<dt><strong>MODIS (Moderate Resolution Imaging Spectroradiometer)</strong></dt><dd><ul class="simple">
+<li><p>Established fire detection system</p></li>
+<li><p>1km pixel resolution</p></li>
+<li><p>Terra and Aqua satellites</p></li>
+</ul>
+</dd>
+<dt><strong>Global Forest Watch (GFW)</strong></dt><dd><ul class="simple">
+<li><p>Forest fire alerts</p></li>
+<li><p>Deforestation monitoring</p></li>
+<li><p>Historical fire data</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>The module can be configured using environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># NASA FIRMS API key</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">NASA_FIRMS_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_api_key_here&quot;</span>
+
+<span class="c1"># Default confidence threshold</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_DEFAULT_CONFIDENCE</span><span class="o">=</span><span class="m">70</span>
+
+<span class="c1"># Request timeout (seconds)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALVIA_REQUEST_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading"></a></h2>
+<p><strong>Optimization Tips:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Use appropriate time ranges</strong>: Shorter time ranges result in faster queries</p></li>
+<li><p><strong>Filter by confidence</strong>: Higher confidence thresholds reduce processing time</p></li>
+<li><p><strong>Limit data sources</strong>: Use only necessary sources for your use case</p></li>
+<li><p><strong>Cache results</strong>: Implement caching for frequently requested areas</p></li>
+</ol>
+<p><strong>Performance Targets:</strong></p>
+<ul class="simple">
+<li><p>Zone detection (100km²): &lt; 30 seconds</p></li>
+<li><p>Point proximity search: &lt; 10 seconds</p></li>
+<li><p>Active hotspots retrieval: &lt; 15 seconds</p></li>
+</ul>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>The module implements comprehensive error handling:</p>
+<dl class="simple">
+<dt><strong>Input Validation:</strong></dt><dd><ul class="simple">
+<li><p>Geographic bounds validation</p></li>
+<li><p>Date range validation</p></li>
+<li><p>Parameter type checking</p></li>
+</ul>
+</dd>
+<dt><strong>API Error Handling:</strong></dt><dd><ul class="simple">
+<li><p>Network timeout handling</p></li>
+<li><p>Rate limit management</p></li>
+<li><p>Service unavailability handling</p></li>
+</ul>
+</dd>
+<dt><strong>Data Quality Checks:</strong></dt><dd><ul class="simple">
+<li><p>Duplicate detection and removal</p></li>
+<li><p>Confidence score validation</p></li>
+<li><p>Coordinate validation</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example Error Handling:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">alviaorange.hotspots</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_hotspots_for_zone</span><span class="p">,</span> <span class="n">HotspotDetectionError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">detect_hotspots_for_zone</span><span class="p">(</span>
+        <span class="n">zone_bounds</span><span class="o">=</span><span class="n">invalid_bounds</span><span class="p">,</span>  <span class="c1"># This will raise an error</span>
+        <span class="n">time_range</span><span class="o">=</span><span class="n">time_range</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="n">HotspotDetectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detection failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Handle the error appropriately</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Handle validation errors</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="schemas.html" class="btn btn-neutral float-left" title="Schemas Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="risk_assessment.html" class="btn btn-neutral float-right" title="Risk Assessment Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alvia Platform Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
