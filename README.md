@@ -4,6 +4,140 @@ AlviaOrange is an open-source collection of wildfire analytics and simulation to
 The goal is to make it easy for data scientists to experiment with algorithms and
 for developers to integrate them into larger systems such as the AlviaPlatform.
 
+## 🏗️ Architecture Overview
+
+AlviaOrange provides a comprehensive wildfire monitoring and analysis API that integrates multiple real-time data sources. The system is designed around production-ready endpoints with no mock data fallbacks, ensuring reliable access to current wildfire, weather, and environmental conditions.
+
+```mermaid
+graph TB
+    subgraph "External Data Sources"
+        FIRMS["🛰️ NASA FIRMS<br/>Fire/Hotspot Data"]
+        OWM["🌤️ OpenWeatherMap<br/>Current Weather & Forecasts"]
+        EC["🍁 Environment Canada<br/>Weather Stations & Climate"]
+        CWFIS["🔥 CWFIS<br/>Fire Danger Maps"]
+        AQ["💨 Environment Canada<br/>Air Quality Data"]
+    end
+
+    subgraph "AlviaOrange API Server"
+        AUTH["🔐 API Authentication<br/>X-API-Key Header"]
+        
+        subgraph "Core Endpoints"
+            WEATHER["🌡️ Weather Services<br/>/api/orange/weather/*"]
+            HOTSPOTS["🔥 Hotspot Detection<br/>/api/orange/hotspots/*"]
+            AIRQUAL["💨 Air Quality<br/>/api/orange/air-quality/*"]
+            CLIMATE["📊 Climate Data<br/>/api/orange/climate/*"]
+            WMS["🗺️ WMS Tiles<br/>/api/orange/wms/tiles/*"]
+        end
+        
+        subgraph "Analysis Engine"
+            DROUGHT["🌵 Drought Analysis<br/>/api/orange/analysis/drought"]
+            FUEL["🌿 Fuel Moisture<br/>/api/orange/analysis/fuel-moisture"]
+            FWI["📈 FWI Anomaly<br/>/api/orange/analysis/fwi-anomaly"]
+            CALC["🧮 FWI Calculator<br/>FFMC, DMC, DC, ISI, BUI, FWI"]
+        end
+    end
+
+    subgraph "Data Processing"
+        REAL["✅ Real Data Only<br/>No Mock Fallbacks"]
+        ERROR["❌ 503 Service Unavailable<br/>When External Services Fail"]
+        CACHE["⚡ Response Caching<br/>Performance Optimization"]
+    end
+
+    subgraph "Client Applications"
+        NOTEBOOK["📓 Jupyter Notebooks<br/>Data Science Workflows"]
+        CURL["💻 CLI/cURL<br/>Direct API Access"]
+        WEB["🌐 Web Applications<br/>PostGIS Integration"]
+        PYTHON["🐍 Python SDK<br/>Programmatic Access"]
+    end
+
+    %% Data source connections
+    FIRMS --> HOTSPOTS
+    OWM --> WEATHER
+    EC --> WEATHER
+    EC --> CLIMATE
+    CWFIS --> WMS
+    AQ --> AIRQUAL
+
+    %% Analysis connections
+    WEATHER --> DROUGHT
+    WEATHER --> FUEL
+    WEATHER --> FWI
+    CLIMATE --> DROUGHT
+    CLIMATE --> FWI
+    CALC --> FUEL
+    CALC --> FWI
+
+    %% API flow
+    AUTH --> WEATHER
+    AUTH --> HOTSPOTS
+    AUTH --> AIRQUAL
+    AUTH --> CLIMATE
+    AUTH --> WMS
+    AUTH --> DROUGHT
+    AUTH --> FUEL
+    AUTH --> FWI
+
+    %% Processing
+    WEATHER --> REAL
+    HOTSPOTS --> REAL
+    AIRQUAL --> REAL
+    DROUGHT --> REAL
+    FUEL --> ERROR
+    FWI --> CACHE
+
+    %% Client connections
+    REAL --> NOTEBOOK
+    ERROR --> CURL
+    CACHE --> WEB
+    AUTH --> PYTHON
+
+    %% Styling
+    classDef dataSource fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef endpoint fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef analysis fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef client fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef processing fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+
+    class FIRMS,OWM,EC,CWFIS,AQ dataSource
+    class WEATHER,HOTSPOTS,AIRQUAL,CLIMATE,WMS,AUTH endpoint
+    class DROUGHT,FUEL,FWI,CALC analysis
+    class NOTEBOOK,CURL,WEB,PYTHON client
+    class REAL,ERROR,CACHE processing
+```
+
+### 🔥 Key Features
+
+- **Real-Time Data Integration**: Live feeds from NASA FIRMS, OpenWeatherMap, and Environment Canada
+- **No Mock Data**: Production-ready system with real data sources only
+- **Comprehensive Analysis**: Advanced wildfire risk assessment using Canadian FWI system
+- **RESTful API**: Clean, documented endpoints with authentication
+- **Scientific Accuracy**: Implements published fire weather index algorithms
+- **Scalable Architecture**: Designed for integration with larger systems like AlviaPlatform
+
+### 🚀 Quick API Reference
+
+Start the server and explore the API:
+
+```bash
+# Start the AlviaOrange API server
+python scripts/run_server.py
+
+# Server runs on http://localhost:8001
+# API Documentation: http://localhost:8001/api/orange/docs
+# Health Check: http://localhost:8001/api/orange/health
+```
+
+**Core Endpoints:**
+- `GET /api/orange/hotspots/active` - Real-time fire detections from NASA FIRMS
+- `GET /api/orange/weather/current` - Current weather conditions
+- `GET /api/orange/weather/forecast` - Weather forecasts with fire weather indices
+- `GET /api/orange/air-quality/basic` - Current air quality readings
+- `GET /api/orange/analysis/drought` - Drought condition analysis
+- `GET /api/orange/analysis/fuel-moisture` - Fuel moisture timeseries
+- `GET /api/orange/analysis/fwi-anomaly` - Fire Weather Index anomalies
+
+**Authentication:** All endpoints require an `X-API-Key` header. Development keys: `demo-key`, `test-key`, `development-key`
+
 ## Setup
 
 ```bash
@@ -114,13 +248,33 @@ history = fetch_air_quality_history("Toronto", "2024-01-01", "2024-01-02")
 
 ## Starting the HTTP server
 
-An HTTP endpoint can be started with:
+The AlviaOrange API server provides comprehensive wildfire monitoring endpoints:
 
 ```bash
+# Start the production server
 python scripts/run_server.py
+
+# Server runs on http://localhost:8001
+# Full API documentation at: http://localhost:8001/api/orange/docs
 ```
 
-This exposes `/hotspots?region=Canada` which returns a JSON list of hotspots.
+**Production Features:**
+- 🔐 API key authentication required
+- 📊 Real-time data from multiple sources (NASA FIRMS, OpenWeatherMap, Environment Canada)
+- 🌡️ Weather and fire weather index calculations
+- 🔥 Active fire detection and hotspot analysis
+- 💨 Air quality monitoring
+- 📈 Advanced wildfire risk analytics
+- 🗺️ WMS tile support for mapping applications
+
+**Example Usage:**
+```bash
+# Get current weather (requires API key)
+curl -H "X-API-Key: demo-key" "http://localhost:8001/api/orange/weather/current?lat=49.2827&lng=-123.1207"
+
+# Get active fire hotspots near Vancouver
+curl -H "X-API-Key: demo-key" "http://localhost:8001/api/orange/hotspots/active?lat=49.2827&lng=-123.1207&radius_km=100"
+```
 
 ## Packaging and Distribution
 

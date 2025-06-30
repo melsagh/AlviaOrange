@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import requests
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 BASE_URL = "https://cwfis.cfs.nrcan.gc.ca"  # Default API base
 
 
-def fetch_layer(layer: str, **params: str) -> Dict[str, Any]:
+def fetch_layer(layer: str, **params: Optional[str]) -> Dict[str, Any]:
     """Return JSON for a given interactive map layer.
 
     Parameters
@@ -31,13 +31,13 @@ def fetch_layer(layer: str, **params: str) -> Dict[str, Any]:
 
 # Convenience wrappers for common layers
 
-def fetch_fire_weather_index(date: str, region: str | None = None) -> Dict[str, Any]:
+def fetch_fire_weather_index(date: str, region: Optional[str] = None) -> Dict[str, Any]:
     """Fetch Fire Weather Index values for a specific date."""
 
     return fetch_layer("fire-weather-index", date=date, region=region)
 
 
-def fetch_fire_danger(date: str, region: str | None = None) -> Dict[str, Any]:
+def fetch_fire_danger(date: str, region: Optional[str] = None) -> Dict[str, Any]:
     """Fetch Fire Danger ratings for a specific date."""
 
     return fetch_layer("fire-danger", date=date, region=region)

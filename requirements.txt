@@ -3,11 +3,14 @@ fastapi
 uvicorn
 requests
 beautifulsoup4
+lxml
 shapely
 pyshp
 pyproj
 plotly
 pydantic
+aiohttp
+python-dotenv
 
 # Weather station functionality dependencies  
 pandas
@@ -26,3 +29,4 @@ seaborn
 # For testing
 pytest
 pytest-cov
+Pillow

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import requests
 from bs4 import BeautifulSoup
-from typing import Dict
+from typing import Dict, Optional
 
 URL = "https://weather.gc.ca/mainmenu/airquality_menu_e.html"
 
@@ -65,7 +65,7 @@ def fetch_aqi_scale() -> Dict[str, Dict[str, str]]:
 
 
 def fetch_air_quality_history(
-    city: str, start_date: str, end_date: str | None = None
+    city: str, start_date: str, end_date: Optional[str] = None
 ) -> list[dict[str, str]]:
     """Fetch historical AQHI data for a city between two dates.
 
