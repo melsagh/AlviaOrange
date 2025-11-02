@@ -92,7 +92,7 @@ class HotspotMetadata(BaseModel):
     """Additional metadata for hotspot detections."""
     satellite: Optional[str] = None
     scan_angle: Optional[float] = None
-    pixel_size: Optional[int] = None
+    pixel_size: Optional[float] = None
     brightness_temp: Optional[float] = None
 
 class Hotspot(BaseModel):
