@@ -192,6 +192,32 @@ async def cached_fetch_hotspots(bbox: Optional[str] = None) -> Dict[str, Any]:
     
     return result
 
+async def cached_fetch_openweather_current(
+    lat: float,
+    lng: float
+) -> Dict[str, Any]:
+    """
+    Cached current weather fetching from OpenweatherMap.
+    """
+    cache_key = f"owm_current_{lat}_{lng}"
+
+    # Try to get from cache first
+    cached_result = cache.get(cache_key)
+    if cached_result:
+        logger.info(f"Cache hit for key: {cache_key}")
+        cached_result["cache_hit"] = True
+        return cached_result
+    
+    # Fetch from API
+    logger.info(f"Cache miss for key: {cache_key}")
+    result = await fetch_openweather_current(lat, lng)
+    
+    # Cache the result
+    cache.set(cache_key, result)
+    result["cache_hit"] = False
+    
+    return result
+
 # ============================================================================
 # EXAMPLE: ERROR HANDLING AND RETRY LOGIC
 # ============================================================================
@@ -369,38 +395,34 @@ async def fetch_openweather_current(
         raise DataSourceError("OPENWEATHERMAP_API_KEY not configured.", status_code=400)
 
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={api_key}&units=metric"
-    
+
+    data = robust_api_call(url, headers={})
+    if data is None:
+        logger.error(f"OpenWeatherMap Current Weather API request failed")
+        raise DataSourceError(f"Failed to connect to OpenWeatherMap")
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status != 200:
-                    raise DataSourceError(f"OpenWeatherMap API returned status {response.status}", status_code=response.status)
-                
-                data = await response.json()
-                
-                current_weather = {
-                    "timestamp": datetime.fromtimestamp(data['dt']).isoformat() + "Z",
-                    "temperature": data.get('main', {}).get('temp'),
-                    "feels_like": data.get('main', {}).get('feels_like'),
-                    "humidity": data.get('main', {}).get('humidity'),
-                    "wind_speed": data.get('wind', {}).get('speed'),
-                    "wind_direction": data.get('wind', {}).get('deg'),
-                    "pressure": data.get('main', {}).get('pressure'),
-                    "visibility": data.get('visibility'),
-                    "conditions": data.get('weather', [{}])[0].get('main')
-                }
-                
-                return {
-                    "source": "OPENWEATHERMAP",
-                    "location": {"lat": lat, "lng": lng},
-                    "current": current_weather
-                }
-    except aiohttp.ClientError as e:
-        logger.error(f"OpenWeatherMap Current Weather API request failed: {e}")
-        raise DataSourceError(f"Failed to connect to OpenWeatherMap: {e}")
+        current_weather = {
+            "timestamp": datetime.fromtimestamp(data['dt']).isoformat(),
+            "temperature": data.get('main', {}).get('temp'),
+            "feels_like": data.get('main', {}).get('feels_like'),
+            "humidity": data.get('main', {}).get('humidity'),
+            "wind_speed": data.get('wind', {}).get('speed'),
+            "wind_direction": data.get('wind', {}).get('deg'),
+            "pressure": data.get('main', {}).get('pressure'),
+            "visibility": data.get('visibility'),
+            "conditions": data.get('weather', [{}])[0].get('main')
+        }
+        
+        return {
+            "source": "OPENWEATHERMAP",
+            "location": {"lat": lat, "lng": lng},
+            "current": current_weather
+        }
+
     except Exception as e:
         logger.error(f"Error processing OpenWeatherMap current weather data: {e}")
         raise DataSourceError(f"Internal error processing current weather data: {e}", status_code=500)
+
 
 # ============================================================================
 # EXAMPLE: FIRE WEATHER INDEX CALCULATION
