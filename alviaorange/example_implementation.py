@@ -369,35 +369,29 @@ async def fetch_openweather_current(
         raise DataSourceError("OPENWEATHERMAP_API_KEY not configured.", status_code=400)
 
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={api_key}&units=metric"
-    
+
+    data = await robust_api_call(url, headers={})
+    if data is None:
+        logger.error(f"OpenWeatherMap Current Weather API request failed")
+        raise DataSourceError(f"Failed to connect to OpenWeatherMap")
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status != 200:
-                    raise DataSourceError(f"OpenWeatherMap API returned status {response.status}", status_code=response.status)
-                
-                data = await response.json()
-                
-                current_weather = {
-                    "timestamp": datetime.fromtimestamp(data['dt']).isoformat() + "Z",
-                    "temperature": data.get('main', {}).get('temp'),
-                    "feels_like": data.get('main', {}).get('feels_like'),
-                    "humidity": data.get('main', {}).get('humidity'),
-                    "wind_speed": data.get('wind', {}).get('speed'),
-                    "wind_direction": data.get('wind', {}).get('deg'),
-                    "pressure": data.get('main', {}).get('pressure'),
-                    "visibility": data.get('visibility'),
-                    "conditions": data.get('weather', [{}])[0].get('main')
-                }
-                
-                return {
-                    "source": "OPENWEATHERMAP",
-                    "location": {"lat": lat, "lng": lng},
-                    "current": current_weather
-                }
-    except aiohttp.ClientError as e:
-        logger.error(f"OpenWeatherMap Current Weather API request failed: {e}")
-        raise DataSourceError(f"Failed to connect to OpenWeatherMap: {e}")
+        current_weather = {
+            "timestamp": datetime.fromtimestamp(data['dt']).isoformat() + "Z",
+            "temperature": data.get('main', {}).get('temp'),
+            "feels_like": data.get('main', {}).get('feels_like'),
+            "humidity": data.get('main', {}).get('humidity'),
+            "wind_speed": data.get('wind', {}).get('speed'),
+            "wind_direction": data.get('wind', {}).get('deg'),
+            "pressure": data.get('main', {}).get('pressure'),
+            "visibility": data.get('visibility'),
+            "conditions": data.get('weather', [{}])[0].get('main')
+        }
+
+        return {
+            "source": "OPENWEATHERMAP",
+            "location": {"lat": lat, "lng": lng},
+            "current": current_weather
+        }
     except Exception as e:
         logger.error(f"Error processing OpenWeatherMap current weather data: {e}")
         raise DataSourceError(f"Internal error processing current weather data: {e}", status_code=500)
@@ -705,4 +699,77 @@ async def fetch_aq_history_by_coords(
         raise e
     except Exception as e:
         logger.error(f"Failed to fetch AQ history by coords: {e}")
-        raise DataSourceError(f"An error occurred while fetching air quality history: {e}", status_code=500) 
+        raise DataSourceError(f"An error occurred while fetching air quality history: {e}", status_code=500)
+
+# ============================================================================
+# EXAMPLE: COORDINATE-BASED AIR QUALITY (OPENWEATHERMAP)
+# ============================================================================
+
+async def fetch_openweather_air_quality(lat: float, lng: float) -> Dict[str, Any]:
+    """
+    Fetch comprehensive air quality data from OpenWeatherMap API.
+
+    Returns detailed pollutant measurements including PM2.5, NO2, O3, SO2, CO.
+
+    Args:
+        lat: Latitude coordinate
+        lng: Longitude coordinate
+
+    Returns:
+        Dict containing comprehensive air quality data
+        {
+        "coord":{"lon":-106.2731,"lat":56.1211},
+        "list":[{"main":{"aqi":1},
+        "components":{"co":117.46,"no":0,"no2":0.23,"o3":54.96,"so2":0.02,"pm2_5":3.65,"pm10":3.68,"nh3":0.73},
+        "dt":1757497126}]}
+    """
+    api_key = config.OPENWEATHERMAP_API_KEY
+    if not api_key or api_key == "demo_key":
+        raise DataSourceError("OPENWEATHERMAP_API_KEY not configured.", status_code=400)
+
+    url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lng}&appid={api_key}"
+
+    # OpenWeather scale for Air Quality Index levels
+    aqi_risk_map = {
+        1: ("Good", "LOW RISK"),
+        2: ("Fair", "LOW RISK"),
+        3: ("Moderate", "MODERATE RISK"),
+        4: ("Poor", "HIGH RISK"),
+        5: ("Very Poor", "VERY HIGH RISK")
+    }
+
+    data = await robust_api_call(url, headers={})
+    if data is None:
+        logger.error(f"OpenWeatherMap Current air pollution request failed")
+        raise DataSourceError(f"Failed to connect to OpenWeatherMap")
+
+    logger.debug(f"OpenWeatherMap Air Quality Data: {data}")
+
+    try:
+        location = data.get("coord", {})
+        if "list" in data and len(data["list"]) > 0:
+            current = data["list"][0]
+            components = current.get("components", {})
+
+            aqi = current.get("main", {}).get("aqi", 0)
+            risk_level = aqi_risk_map.get(aqi)[1] if aqi else "Unknown"
+
+            return {
+                "source": "OpenWeatherMap",
+                "aqi": aqi,
+                "status": risk_level,
+                "pollutants": {
+                    "pm2_5": components.get("pm2_5", None),  # μg/m³
+                    "pm10": components.get("pm10", None),   # μg/m³
+                    "no2": components.get("no2", None),     # μg/m³
+                    "o3": components.get("o3", None),       # μg/m³
+                    "so2": components.get("so2", None),     # μg/m³
+                    "co": components.get("co", None),       # μg/m³
+                    "nh3": components.get("nh3", None),     # μg/m³
+                },
+                "timestamp":  datetime.fromtimestamp(current.get("dt", 0)).isoformat(),
+                "location": {"lat": location.get("lat"), "lng": location.get("lon")}
+            }
+    except Exception as e:
+        logger.error(f"Error processing OpenWeatherMap current air pollution data: {e}")
+        raise DataSourceError(f"Internal error processing current air pollution {e}", status_code=500)
