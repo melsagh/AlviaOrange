@@ -379,7 +379,7 @@ async def fetch_openweather_current(
                 data = await response.json()
                 
                 current_weather = {
-                    "timestamp": datetime.fromtimestamp(data['dt']).isoformat() + "Z",
+                    "timestamp": datetime.fromtimestamp(data['dt']).isoformat(),
                     "temperature": data.get('main', {}).get('temp'),
                     "feels_like": data.get('main', {}).get('feels_like'),
                     "humidity": data.get('main', {}).get('humidity'),
