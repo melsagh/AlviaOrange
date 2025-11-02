@@ -26,6 +26,8 @@ from .schemas import (
     ZoneBounds, Coordinates, TimeRange, APIResponse, ErrorResponse
 )
 
+from .example_implementation import fetch_nasa_firms_hotspots
+
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -104,7 +106,7 @@ def fetch_hotspots(
 
     return _fetch_by_region_name(str(region))
 
-def detect_hotspots_for_zone(
+async def detect_hotspots_for_zone(
     zone_bounds: Dict[str, float],
     time_range: Dict[str, str],
     sources: List[str] = ["VIIRS", "MODIS", "FIRMS"],
@@ -144,7 +146,7 @@ def detect_hotspots_for_zone(
         
         for source in sources:
             try:
-                hotspots = _fetch_hotspots_from_source(
+                hotspots = await _fetch_hotspots_from_source(
                     bounds, time_range_obj, source, min_confidence, key
                 )
                 all_hotspots.extend(hotspots)
@@ -285,7 +287,7 @@ def get_hotspots_near_point(
         logger.error(f"Nearby hotspot search failed: {str(e)}")
         raise HotspotDetectionError(f"Failed to find nearby hotspots: {str(e)}")
 
-def _fetch_hotspots_from_source(
+async def _fetch_hotspots_from_source(
     bounds: ZoneBounds,
     time_range: TimeRange,
     source: str,
@@ -308,9 +310,51 @@ def _fetch_hotspots_from_source(
     Raises:
         APIConnectionError: When API request fails
     """
+    hotspot_confidence_mapping = {
+        "l": 30,
+        "n": 70,
+        "h": 90
+    }
     try:
         # For now, return mock data since we don't have real API keys
         # In production, this would make actual API calls to NASA FIRMS
+
+        if source == "FIRMS":
+            # bbox: Optional[str] = Query(None, description="Bounding box: lng_min,lat_min,lng_max,lat_max"
+            bbox = f"{bounds.west},{bounds.south},{bounds.east},{bounds.north}"
+            days_back = (time_range.end_date - time_range.start_date).days
+            result = await fetch_nasa_firms_hotspots(
+                bbox=bbox,
+                days_back=days_back
+            )
+
+            hotspots = []
+            for h in result["hotspots"]:
+                date_str = h["date"]
+                time_str = f"{h.get('time', '0000'):04d}"
+                datetimestr = f"{date_str}T{time_str[:2]}:{time_str[2:]}:00"
+                timestamp = datetime.fromisoformat(datetimestr)
+                confidence=hotspot_confidence_mapping.get(h.get("confidence"), 'n')
+                if confidence >= min_confidence:
+                    hotspots.append(
+                        Hotspot(
+                            id=uuid4(),
+                            latitude=h["latitude"],
+                            longitude=h["longitude"],
+                            timestamp=timestamp,
+                            confidence=confidence,
+                            frp=h.get("frp"),
+                            source=HotspotSource(source),
+                            metadata=HotspotMetadata(
+                                satellite=h.get("satellite", "Unknown"),
+                                scan_angle=h.get("scan_angle", None),
+                                pixel_size=h.get("pixel_size", None),
+                                brightness_temp=h.get("brightness_temp", None)
+                            )
+                        )
+                    )
+
+            return hotspots
         
         mock_hotspots = [
             Hotspot(
